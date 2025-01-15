@@ -1,0 +1,35 @@
+.content {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.selectWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .selectLabel {
+        color: #344054;
+        font-size: 14px;
+        font-weight: 500;
+    }
+}
+
+.actions {
+    display: flex;
+    margin-top: 25px;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+@media screen and (max-width: 1000px) {
+    .actions {
+        flex-direction: column;
+        gap: 10px;
+        button {
+            width: 100% !important;
+        }
+    }
+}

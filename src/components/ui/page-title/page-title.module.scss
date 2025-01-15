@@ -1,0 +1,278 @@
+.pageTitle {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+
+  .title {
+    font-size: 30px;
+    font-weight: 600;
+    color: #14151a;
+  }
+
+  .backArrow {
+    cursor: pointer;
+    height: 32px;
+    width: 24px;
+    margin-top: 5px;
+  }
+
+  .statuses {
+    display: flex;
+    margin-left: 8px;
+    gap: 5px;
+  }
+  .userIconSvg {
+    margin-right: 10px;
+  }
+  .titleDivUser {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    p {
+      color: #0F132499;
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
+  .status1 {
+    border-radius: 8px;
+    padding: 4px 6px;
+
+    p {
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
+
+  // Цветовые классы
+  .purple {
+    background-color: #ecdffb;
+
+    p {
+      color: #5314a3;
+    }
+
+    &.bordered {
+      border: 1px solid #0A0F2914; // Граница для purple
+    }
+  }
+
+  .orange {
+    background-color: #fdead8;
+
+    p {
+      color: #ae590a;
+    }
+
+    &.bordered {
+      border: 1px solid #0A0F2914; // Граница для orange
+    }
+  }
+
+  .blue {
+    background-color: #e3eafd;
+
+    p {
+      color: #133a9a;
+    }
+
+    &.bordered {
+      border: 1px solid #0A0F2914; // Граница для blue
+    }
+  }
+
+  .green {
+    background-color: #d1fae4;
+
+    p {
+      color: #166e3f;
+    }
+
+    &.bordered {
+      border: 1px solid #0A0F2914; // Граница для green
+    }
+  }
+  .elit {
+    background-color: #FDEAD8;
+    p {
+      color: #AE590A;
+    }
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+
+  }
+  .topUser {
+    @media screen and (max-width: 750px) {
+      flex-direction: row !important;
+    }
+  }
+  .right {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bott {
+    display: flex;
+    gap: 4px;
+    margin-top: 10px;
+  }
+
+  .infoBlock {
+    width: auto;
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    border: 1px solid #DEE0E3;
+    border-radius: 10px;
+
+    .svg {
+      margin-left: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    p {
+      margin-left: 7px;
+    }
+  }
+
+  .globalLeft {
+    display: flex;
+  }
+
+  .rightBtns {
+    width: 25vw;
+    display: flex;
+    justify-content: flex-end;
+    gap: 7px;
+  }
+
+  .statusesBtnDiv {
+    position: relative;
+  }
+}
+.bordered {
+  padding: 2px 4px !important;
+  p {
+    font-size: 12px !important;
+  }
+}
+.responsiveHeader {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #DEE0E3;
+  
+  h2 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #000;
+  }
+
+  .backBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    
+    span {
+      color: #7364DB;
+      font-size: 17px;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      path {
+        stroke: #7364DB;
+      }
+    }
+  }
+
+  .editBtn {
+    color: #7364DB;
+    font-size: 17px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .backArrow {
+    display: none;
+  }
+  .rightBtns {
+    display: none !important;
+  }
+  .responsiveHeader {
+    display: flex;
+  }
+  .pageTitle {
+    margin-top: 55px;
+    flex-direction: column;
+    .title {
+      font-size: 24px;
+    }
+    .top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .statuses {
+      margin-left: 0;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .bott {
+      margin-top: 10px;
+    }
+  }
+}
+@media screen and (max-width: 1628px) {
+  .top {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+// @media screen and (max-width: 992px) {
+//   .wrapper {
+//     .rightBtns {
+//       width: 45vw;
+//     }
+//   }
+// }
+
+// @media screen and (max-width: 768px) {
+//   .wrapper {
+//     flex-direction: column;
+//     gap: 15px;
+//     align-items: flex-start;
+
+//     .rightBtns {
+//       width: 100%;
+//       justify-content: flex-start;
+//     }
+//   }
+// }
+
+// @media screen and (max-width: 576px) {
+//   .wrapper {
+//     .globalLeft {
+//       flex-direction: column;
+//       gap: 10px;
+//       width: 100%;
+//     }
+//   }
+// }

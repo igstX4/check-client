@@ -1,0 +1,188 @@
+.applicationInfo {
+  .title {
+    margin-top: 20px;
+    color: #14151a;
+    font-weight: 600;
+    font-size: 24px;
+  }
+  .infoList {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    .infoCard {
+      width: 370px;
+      height: 184px;
+      flex-grow: 1;
+      transition: 0.2s;
+      padding: 16px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid #dee0e3;
+      h2 {
+        color: #0d112666;
+        font-weight: 500;
+        font-size: 16px;
+        // margin-bottom: 15px;
+      }
+      .infoItem {
+        p {
+          color: #0f132499;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 20px;
+        }
+        h3 {
+          color: #741de2;
+          font-weight: 500;
+          font-size: 14px;
+          text-decoration: underline;
+        }
+        .link {
+          margin-top: 4px;
+          display: flex;
+          display: flex;
+          cursor: pointer;
+          align-items: center;
+          svg {
+            margin-right: 5px;
+          }
+          .editInput {
+            width: 100%;
+            margin-top: 2px;
+          }
+        }
+        .none {
+          cursor: text;
+          h3 {
+            color: #14151a;
+            text-decoration: none;
+          }
+        }
+
+        .elit {
+          h3 {
+            color: #ae590a !important;
+          }
+          svg {
+            path {
+              fill: #ae590a !important;
+            }
+          }
+        }
+        .elitMark {
+          margin-left: 5px;
+          padding: 3px 6px;
+          background-color: #fdead8;
+          border-radius: 6px;
+          color: #ae590a;
+        }
+      }
+    }
+    .editingInfoCard {
+      height: 232px !important;
+    }
+  }
+}
+
+.checks {
+  width: 100%;
+  margin-top: 25px;
+  .titleDiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .checkInfoList {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    .item {
+      flex-grow: 1;
+      width: 266px;
+      padding: 16px;
+      background-color: #f7f7f8;
+      border: 1px solid #dee0e3;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100%;
+      p {
+        color: #0f132499;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      h4 {
+        margin-top: 10px;
+        color: #14151a;
+        font-weight: 500;
+        font-size: 14px;
+      }
+    }
+  }
+}
+.title {
+  // margin-top: 20px;
+  color: #14151a;
+  font-weight: 600;
+  font-size: 24px;
+}
+.bottomBtnDiv {
+  width: 100%;
+  display: flex;
+  margin-top: 25px;
+  justify-content: center;
+  button {
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    gap: 5px;
+    background-color: #f0f0f0;
+    width: 140px;
+    border: 0;
+    height: 32px;
+    transition: .2s;
+    &:hover {
+      background-color: #dfdfdf;
+    }
+  }
+}
+
+.historySection {
+  margin-top: 32px;
+  
+  .title {
+    // font-size: 18px;
+    // font-weight: 500;
+    margin: 0 0 20px 0;
+    color: #14151A;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .infoList {
+    flex-wrap: wrap;
+  }
+}
+
+.section {
+    margin-top: 40px;
+}
+
+.sectionTitle {
+    font-size: 24px;
+    font-weight: 600;
+    color: #14151A;
+    margin-bottom: 24px;
+}
+
+.checksTable {
+    margin-top: 40px;
+}

@@ -1,0 +1,94 @@
+.container {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #dee0e3;
+  overflow-x: auto;
+}
+
+.desktop {
+  display: block;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.mobile {
+  display: none;
+  padding: 16px;
+  gap: 16px;
+
+  @media screen and (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #f7f7f8;
+  }
+
+  th {
+    font-weight: 400;
+    color: #0F132499;
+    font-size: 14px;
+  }
+
+  td {
+    color: #14151A;
+    font-size: 14px;
+  }
+}
+
+.card {
+  padding: 16px;
+  border: 1px solid #dee0e3;
+  border-radius: 8px;
+  background: white;
+}
+
+.cardHeader {
+  margin-bottom: 12px;
+}
+
+.date {
+  color: #0F132499;
+  font-size: 14px;
+}
+
+.messageContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  > span:not(.userLink) {
+    color: #333;
+  }
+}
+
+.userLink {
+  color: #741de2;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+} 

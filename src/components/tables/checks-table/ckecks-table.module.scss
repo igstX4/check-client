@@ -1,0 +1,558 @@
+.wrapper {
+  width: 100%;
+
+  &.applicationMode {
+    .header {
+      .titleBlock {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        h1 {
+          margin: 0;
+        }
+      }
+    }
+
+    .container {
+      background: transparent;
+      box-shadow: none;
+      margin-top: 0;
+      border: none;
+
+      .table {
+        background: transparent;
+        border: 1px solid #DEE0E3;
+        border-radius: 10px;
+      }
+
+      .cardsContainer {
+        border: none;
+        background: transparent;
+        
+        .card {
+          border: 1px solid #DEE0E3;
+          border-radius: 10px;
+        }
+      }
+    }
+
+    .addCheckButton {
+      width: 140px;
+      height: 32px;
+      background: #f0f0f0;
+      border-radius: 10px;
+      margin: 25px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: .2s;
+      font-size: 14px;
+      color: #14151A;
+      border: none;
+      
+      svg {
+        path {
+          stroke: #14151A;
+        }
+      }
+      
+      &:hover {
+        background-color: #dfdfdf;
+      }
+
+      &.mobileButton {
+        @media (max-width: 800px) {
+          margin-top: 16px;
+          width: 100%;
+          height: 40px;
+          background: #0A0F290A;
+          border-radius: 12px;
+          gap: 8px;
+          
+          &:hover {
+            background: rgba(10, 15, 41, 0.08);
+          }
+        }
+      }
+    }
+  }
+}
+
+.header {
+  .titleBlock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #14151A;
+    }
+  }
+}
+
+.container {
+    width: 100%;
+    margin-top: 16px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dee0e3;
+    overflow-x: auto;
+}
+
+.search {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dee0e3;
+    border-bottom: none; /* Убираем нижнюю границу */
+    border-radius: 5px 5px 0 0; /* Закругления только сверху */
+    font-size: 16px;
+    outline: none;
+}
+
+.table {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: collapse;
+    display: table;
+
+    th,
+    td {
+       padding: 16px;
+       text-align: left;
+       border-bottom: 1px solid #f7f7f8;
+    }
+
+    th {
+       font-weight: 400;
+       color: #0F132499;
+       background-color: #f8f8f8;
+       padding: 12px 16px;
+       white-space: nowrap;
+    }
+
+    td {
+       color: #333;
+       white-space: nowrap;
+       
+       &:first-child {
+          min-width: 60px;
+       }
+       
+       &:nth-child(2) {
+          min-width: 160px;
+       }
+       
+       &:nth-child(3) {
+          min-width: 200px;
+       }
+       
+       &:nth-child(4) {
+          min-width: 100px;
+       }
+       
+       &:nth-child(5) {
+          min-width: 100px;
+       }
+       
+       &:nth-child(6), &:nth-child(7), &:nth-child(8) {
+          min-width: 140px;
+       }
+    }
+
+    .status {
+       font-weight: bold;
+       border-radius: 5px;
+       padding: 5px 10px;
+
+       &::after {
+          content: attr(data-status);
+       }
+
+       &.Создана {
+          background-color: #5dbd5d;
+       }
+
+       &.Выдана {
+          background-color: #f39c12;
+       }
+    }
+}
+.companyDiv {
+    display: flex;
+    flex-direction: column;
+    .companyName {
+       color: #924FE8;
+       text-decoration: underline;
+       font-weight: 500;
+       font-size: 14px;
+    }
+    .inn {
+       color: #0F132499;
+       font-weight: 400;
+       font-size: 12px;
+    }
+    .sellerName {
+       color: #AE590A;
+       text-decoration: underline;
+       font-weight: 500;
+       font-size: 14px;
+    }
+    .checks {
+       color: #14151A;
+       font-weight: 500;
+       font-size: 14px;
+    }
+}
+.clientDiv {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .clientName {
+       color: #924FE8;
+       text-decoration: underline;
+       font-weight: 500;
+       font-size: 14px;
+    }
+}
+.sum {
+    color: #14151A;
+    font-size: 14px;;
+    font-weight: 500;
+}
+.vat {
+    background-color: #F0F4FE;
+}
+.dateContainer {
+    width: 140px;
+    border-radius: 10px;
+    border: 1px solid #DEE0E3;
+    display: flex;
+    padding: 6px 10px;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.viewToggle {
+    display: none;
+    padding: 16px;
+    gap: 0;
+    justify-content: flex-end;
+   //  border-bottom: 1px solid #dee0e3;
+}
+
+.toggleButton {
+    padding: 8px 12px;
+    border: 1px solid #dee0e3;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+
+    &:first-child {
+        border-radius: 8px 0 0 8px;
+    }
+
+    &:last-child {
+        border-radius: 0 8px 8px 0;
+        border-left: none;
+    }
+
+    &.active {
+        background: #924FE8;
+        border-color: #924FE8;
+        svg path {
+            fill: white;
+        }
+
+        &:not(:last-child) {
+            border-right: 1px solid #924FE8;
+        }
+    }
+}
+
+.cardsContainer {
+    display: none;
+}
+
+.card {
+    border: 1px solid #dee0e3;
+    border-radius: 10px;
+    padding: 16px;
+    background: white;
+    margin-bottom: 16px;
+
+    &.applicationMode {
+        .cardHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #DEE0E3;
+
+            .cardHeaderLeft {
+                .cardValue {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #14151A;
+                }
+            }
+
+            .cardHeaderRight {
+                .actions {
+                    display: flex;
+                    gap: 8px;
+                }
+            }
+        }
+    }
+}
+.SellerBuyer {
+   display: flex;
+   width: 100%;
+   justify-content: space-between;
+}
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.cardHeaderLeft, .cardHeaderRight {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cardDivider {
+    height: 1px;
+    background-color: #dee0e3;
+    margin: 12px 0;
+}
+
+.cardBody {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardSection {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.divEnd {
+   display: flex;
+   flex-direction: column;
+   // gap: 15px;
+   width: 100%;
+   .cardRow2 {
+      margin: 12px 0px;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 3px;
+   }
+   .cardSection {
+      gap: 15px;
+      .cardRow {
+         flex-direction: row;
+         display: flex;
+         gap: 4px;
+         .cardLabel {
+            font-size: 14px;
+            color: #0D112666;
+         }
+         .cardValue {
+            font-size: 14px;
+            color: #14151A;
+         }
+      }
+   }
+}
+.cardRow {
+    display: flex;
+    flex-direction: column;
+//     justify-content: space-between;
+//     align-items: center;
+}
+.cardRowINN {
+   display: flex;
+   gap: 3px;
+   span {
+      color: #0F132499;
+      font-size: 12px;
+   }
+}
+.buyer, .seller {
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 3px;
+    text-decoration: underline;
+}
+.buyer {
+   color: #924FE8 !important;
+}
+.seller {
+   color: #4778F5 !important;
+}
+
+.cardLabel {
+    color: #0F132499;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.cardValue {
+    color: #14151A;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+@media (max-width: 600px) {
+    .viewToggle {
+        display: flex;
+    }
+    
+    .table[data-view-mode='cards'] {
+        display: none;
+    }
+    
+    .cardsContainer[data-view-mode='table'] {
+        display: none;
+    }
+    
+    .cardsContainer[data-view-mode='cards'] {
+        display: flex;
+        flex-direction: column;
+      //   padding: 16px;
+    }
+    .container[data-view-mode='cards'] {
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding-right: 16px;
+  
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  
+  .editButton {
+    color: #4778F5;
+  }
+  
+  .deleteButton {
+    color: #FF3B30;
+  }
+}
+
+.totalRow {
+  font-weight: 500;
+  
+  td {
+    border-top: 1px solid #dee0e3;
+  }
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #14151A;
+  margin-bottom: 20px;
+}
+
+.checksInfoWrapper {
+  margin: 20px 0;
+
+  .addCheckButton {
+    margin-top: 16px;
+    width: 100%;
+    height: 40px;
+    background: #0A0F290A;
+    border-radius: 12px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: .2s;
+    font-size: 14px;
+    color: #14151A;
+    
+    svg {
+      path {
+        stroke: #14151A;
+      }
+    }
+    
+    &:hover {
+      background: rgba(10, 15, 41, 0.08);
+    }
+  }
+}
+
+.viewToggle {
+  margin-bottom: 16px;
+  // ... остальные стили viewToggle
+}
+
+.bottomBtnDiv {
+  width: 100%;
+  display: flex;
+  margin-top: 25px;
+  justify-content: center;
+  
+  button {
+    width: 100%;
+    height: 40px;
+    background: #0A0F290A;
+    border-radius: 12px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: .2s;
+    
+    svg {
+      path {
+        stroke: #14151A;
+      }
+    }
+    
+    &:hover {
+      background: rgba(10, 15, 41, 0.08);
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .bottomBtnDiv button {
+    width: 100%;
+  }
+}
