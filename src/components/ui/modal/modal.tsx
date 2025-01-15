@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Modal.module.scss";
+import styles from "./modal.module.scss";
 import { AlertIcon } from "../../svgs/svgs";
 
 interface ModalProps {
