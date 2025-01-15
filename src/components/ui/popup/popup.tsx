@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./PopUp.module.scss";
+import styles from "./popup.module.scss";
 
 interface PopUpProps {
    message: string;
