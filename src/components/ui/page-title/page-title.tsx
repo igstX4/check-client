@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 
 interface PageTitleProps {
   title: string;
+  isCompany?: boolean;
   statuses?: ApplicationStatus[];
   setStatuses?: (statuses: ApplicationStatus[]) => void;
   name?: string;
@@ -41,6 +42,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
   name,
   noRightBtns,
   setStatuses,
+  isCompany = false,
   isUser = false,
   handleUpdateUser,
   editing = false,
@@ -80,11 +82,17 @@ const PageTitle: React.FC<PageTitleProps> = ({
     }
   };
 
+  const handleDateClick = () => {
+    if (date) {
+      navigate(`/admin/applications?date=${encodeURIComponent(date)}`);
+    }
+  };
+
   const renderStatusBadges = () => {
     if (!statuses.length) return null;
 
     return (
-      <div onClick={handleStatusChange} className={s.statuses}>
+      <div onClick={() => setChooseStatusOpened(true)} className={s.statuses}>
         {statuses.map((status) => (
           <StatusBadge key={status} status={status} big={true} />
         ))}
@@ -153,7 +161,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
           )
         )}
 
-        {isUser &&
+        {isUser && !isCompany && 
           <Button
             variant="white"
             onClick={() => setOpen && setOpen()}
@@ -202,15 +210,15 @@ const PageTitle: React.FC<PageTitleProps> = ({
           </div>
           <div className={s.right}>
             <div className={`${s.top} ${isUser ? s.topUser : ''}`}>
-              {isUser && <div className={s.userIconSvg}><UserIcon /></div>}
+              {isUser && !isCompany && <div className={s.userIconSvg}><UserIcon /></div>}
               <div className={s.titleDivUser}>
                 {title && <h1 className={s.title}>{title}</h1>}
-                {isUser && <p>{userDeskr}</p>}
+                {isUser ? <p>{userDeskr}</p> : isCompany ? <p style={{marginTop:'25px'}}>{companyDeskr}</p> : null}
               </div>
               {renderStatusBadges()}
             </div>
             <div className={s.bott}>
-              {date && <div className={s.infoBlock}>
+              {date && <div className={s.infoBlock} onClick={handleDateClick} style={{ cursor: 'pointer' }}>
                 <div className={s.svg}>
                   <Calendar />
                 </div>
@@ -218,9 +226,10 @@ const PageTitle: React.FC<PageTitleProps> = ({
               </div>}
 
               {name && <div className={s.infoBlock}>
-                <div className={s.svg}>
+                 <div className={s.svg}>
                   <DetailedAvatar />
                 </div>
+                
                 <p>{name}</p>
               </div>}
             </div>

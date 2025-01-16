@@ -81,9 +81,7 @@ const AddSellerModal: FC<Props> = ({
             newErrors.inn = 'ИНН должен содержать 10 или 12 цифр';
         }
 
-        if (!telegram.trim()) {
-            newErrors.telegram = 'Введите ссылку на Telegram';
-        }
+        
 
         setErrors(newErrors);
         return !Object.values(newErrors).some(error => error);
@@ -95,7 +93,7 @@ const AddSellerModal: FC<Props> = ({
         onSubmit({
             name,
             inn,
-            tg_link: telegram,
+            tg_link: 'tg_link',
             type: selectedType
         });
     };
@@ -123,14 +121,7 @@ const AddSellerModal: FC<Props> = ({
                     onChange={(e) => setInn(e.target.value)}
                     error={errors.inn}
                 />
-                <Input 
-                    noMargin={true} 
-                    label='Telegram-канал компании' 
-                    placeholder='Введите ссылку' 
-                    value={telegram} 
-                    onChange={(e) => setTelegram(e.target.value)}
-                    error={errors.telegram}
-                />
+                
                 <div className={s.selectWrapper}>
                     <span className={s.selectLabel}>Тип компании</span>
                     <TypeSelect

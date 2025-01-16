@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import s from './access-section.module.scss'
 import { Attention, Attention2, Plus } from '../../../../components/svgs/svgs'
 import Button from '../../../../components/ui/button/button'
@@ -137,16 +137,18 @@ const AccessSection = () => {
         [admins]
     );
 
+    const navigate = useNavigate();
+
     if (isWarningOpen) {
         return (
             <div className={s.warningWrapper}>
                 <div className={s.warningContent}>
                     <Attention2 />
                     <h1 className={s.warningTitle}>Внимание! Здесь выдаётся доступ в <span>панель администратора</span></h1>
-                    <p className={s.warningDescription}>Это значит, что если вы выдадите доступ из этого раздела, то <span>пользователь может получить доступ ко всем заявкам и данным клиентов омпаний.</span> Если вы хотите зарегистрировать клиента, перейдите в раздел "Клиенты".</p>
+                    <p className={s.warningDescription}>Это значит, что если вы выдадите доступ из этого раздела, то <span>пользователь может получить доступ ко всем заявкам и данным клиентов компаний.</span> Если вы хотите зарегистрировать клиента, перейдите в раздел "Клиенты".</p>
                     <div className={s.warningButtons}>
                         <button onClick={() => setIsWarningOpen(false)} className={`${s.warningButton} ${s.warningButtonRed}`}>Открыть раздел</button>
-                        <button className={`${s.warningButton} ${s.warningButtonWhite}`}>Закрыть</button>
+                        <button onClick={() => navigate('/admin/clients')} className={`${s.warningButton} ${s.warningButtonWhite}`}>Перейти в раздел "Клиенты"</button>
                     </div>
                 </div>
             </div>

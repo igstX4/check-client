@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'https://check-server-pi.vercel.app/api';
+// const API_URL = 'https://check-server-pi.vercel.app/api';
+const API_URL = 'http://localhost:4000/api';
 
 // Инстанс для клиентских запросов
 export const clientApi = axios.create({

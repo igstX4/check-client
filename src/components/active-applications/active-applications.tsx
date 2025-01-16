@@ -10,7 +10,7 @@ import { FilterState } from '../../types/filter-state';
 import { ApplicationStatus } from '../../constants/statuses';
 import Button from '../ui/button/button';
 import { DownloadSvg } from '../svgs/svgs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ApplicationsSearchBottomSheet from '../modals/applications-search-bottom-sheet/applications-search-bottom-sheet';
 import ExportModal from '../modals/export-modal/export-modal';
 
@@ -22,6 +22,8 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { applications = [], pagination, isLoading } = useSelector((state: RootState) => state.application);
+  const [searchParams] = useSearchParams();
+  const dateParam = searchParams.get('date');
   // console.log(applications);
   const [showSearch, setShowSearch] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
@@ -71,6 +73,13 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
   useEffect(() => {
     loadApplications();
   }, [loadApplications]);
+
+  useEffect(() => {
+    if (dateParam) {
+      // Здесь логика фильтрации по дате
+      // fetchApplicationsByDate(dateParam);
+    }
+  }, [dateParam]);
 
   const handleDateChange = (start: string, end: string) => {
     // console.log('Date change:', start, end);

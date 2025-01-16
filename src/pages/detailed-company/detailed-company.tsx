@@ -510,7 +510,8 @@ const DetailedCompany = () => {
       <PageTitle 
         title={companyDetails.name}
         isUser={true} 
-        userDeskr='Профиль компании' 
+        isCompany={true}
+        userDeskr={`ИНН ${companyDetails.inn}`} 
         setOpen={() => setIsOpen(true)}
       />
       
