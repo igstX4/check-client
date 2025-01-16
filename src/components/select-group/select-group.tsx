@@ -33,6 +33,7 @@ interface SelectGroupProps {
   hideCompanyFilter?: boolean;
   hideCompanyFilterDisplay?: boolean;
   useMobileView?: boolean;
+  onRemoveDateFilter: () => void;
 }
 
 interface SelectOption {
@@ -68,7 +69,8 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
   hideStatusFilter = false,
   hideCompanyFilter = false,
   hideCompanyFilterDisplay = false,
-  useMobileView = false
+  useMobileView = false,
+  onRemoveDateFilter
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { companies, sellers, users, isLoading } = useSelector((state: RootState) => state.selectors);
@@ -84,7 +86,14 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
 
   // Состояния для фильтров
   const [sumFilter, setSumFilter] = useState<{ from: string; to: string } | undefined>();
-  const [dateFilter, setDateFilter] = useState<string>('');
+
+  // Формируем dateFilter из filters.date
+  const dateFilter = useMemo(() => {
+    if (filters.date.start && filters.date.end) {
+      return `${filters.date.start} – ${filters.date.end}`;
+    }
+    return '';
+  }, [filters.date]);
 
   // Мемоизируем опции селектов
   const selectOptions = useMemo(() => ({
@@ -187,12 +196,10 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
   };
 
   const handleDateChange = (start: string, end: string) => {
-    setDateFilter(start && end ? `${start} – ${end}` : '');
     onDateChange(start, end);
   };
 
   const handleRemoveDateFilter = () => {
-    setDateFilter('');
     onDateChange('', '');
   };
 
@@ -292,7 +299,7 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
           statusFilters={selectOptions.status.filter(opt => opt.checked).map(opt => opt.label)}
           sumFilter={sumFilter}
           onRemoveFilter={handleRemoveFilter}
-          onRemoveDateFilter={handleRemoveDateFilter}
+          onRemoveDateFilter={onRemoveDateFilter}
           hideCompanyFilterDisplay={hideCompanyFilterDisplay}
         />
       )}

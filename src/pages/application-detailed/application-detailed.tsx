@@ -210,6 +210,8 @@ const ApplicationDetailed: React.FC = () => {
         setEditing(false);
         setTempChanges({});
         setIsAddCheckModalOpen(false);
+      } else {
+        addNotification('Нет изменений для сохранения', 'error');
       }
     } catch (err: any) {
       console.error('Update error:', err);
@@ -280,7 +282,8 @@ const ApplicationDetailed: React.FC = () => {
         setEditing={setEditing}
         onSave={handleSaveChanges}
         onCancel={handleCancelEditing}
-        date={currentApplication?.dates?.start}
+        clientId={currentApplication?.user?.id}
+        date={currentApplication?.createdAt}
       />
       <Comments editing={editing} applicationId={id || ''} />
 
@@ -290,6 +293,7 @@ const ApplicationDetailed: React.FC = () => {
           <InfoCard
             title="ПОКУПАТЕЛЬ"
             editing={editing}
+            companyId={currentApplication.company?.id}
             fields={[
               {
                 label: "Компания",

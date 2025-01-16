@@ -4,6 +4,7 @@ import CustomSelect from '../ui/custom-select/custom-select';
 import { Company } from '../../types/company.types';
 import { ArrowLink } from '../svgs/svgs';
 import s from './info-card.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface Field {
   label: string;
@@ -31,6 +32,7 @@ interface InfoCardProps {
     type: 'elite' | 'white';
   }>;
   onSellerChange?: (sellerId: string, sellerInn: string) => void;
+  companyId?: string;
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({
@@ -40,14 +42,29 @@ const InfoCard: React.FC<InfoCardProps> = ({
   isCustomSelect,
   seller,
   sellers,
-  onSellerChange
+  onSellerChange,
+  companyId
 }) => {
+  const navigate = useNavigate();
+
   const formatSellersForSelect = () => {
     return sellers?.map(s => ({
       name: s.name,
       inn: s.inn,
       type: s.type === 'elite' ? 'elit' : 'standart'
     })) || [];
+  };
+
+  const handleFieldClick = (label: string) => {
+    if (editing) return;
+
+    if (title === "ПОКУПАТЕЛЬ") {
+      if ((label === "ИНН" || label === "Компания") && companyId) {
+        navigate(`/admin/detailed-company/${companyId}`);
+      }
+    } else if (title === "ПРОДАВЕЦ") {
+      navigate('/admin/settings/sellers');
+    }
   };
 
   return (
@@ -74,10 +91,14 @@ const InfoCard: React.FC<InfoCardProps> = ({
                   }}
                 />
               ) : (
-                <>
+                <div 
+                  onClick={() => navigate('/admin/settings/sellers')}
+                  className={s.link}
+                  style={{ cursor: 'pointer' }}
+                >
                   <h3>{seller.name}</h3>
                   <ArrowLink />
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -94,10 +115,14 @@ const InfoCard: React.FC<InfoCardProps> = ({
                   />
                 </div>
               ) : (
-                <>
+                <div 
+                  onClick={() => navigate('/admin/settings/sellers')}
+                  className={s.link}
+                  style={{ cursor: 'pointer' }}
+                >
                   <h3>{seller.inn}</h3>
                   <ArrowLink />
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -118,7 +143,17 @@ const InfoCard: React.FC<InfoCardProps> = ({
                 </div>
               ) : (
                 <>
-                  <h3>{field.value}{field.suffix}</h3>
+                  <h3 
+                    onClick={() => handleFieldClick(field.label)}
+                    style={{ 
+                      cursor: !editing && (
+                        (title === "ПОКУПАТЕЛЬ" && (field.label === "ИНН" || field.label === "Компания")) || 
+                        title === "ПРОДАВЕЦ"
+                      ) ? 'pointer' : 'default' 
+                    }}
+                  >
+                    {field.value}{field.suffix}
+                  </h3>
                   {!field.hideArrow && <ArrowLink />}
                 </>
               )}

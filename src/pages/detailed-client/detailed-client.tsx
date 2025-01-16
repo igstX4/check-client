@@ -58,7 +58,7 @@ const DetailedClient = () => {
     }
   }, [id]);
 
-  const handleDateChange = useCallback((start: string, end: string) => {
+  const handleDateChange = (start: string, end: string) => {
     if (id) {
       // Сначала обновляем локальное состояние
       setFilters(prev => {
@@ -78,10 +78,11 @@ const DetailedClient = () => {
           ...(updatedFilters.sum?.from ? { sumFrom: updatedFilters.sum.from } : {}),
           ...(updatedFilters.sum?.to ? { sumTo: updatedFilters.sum.to } : {})
         };
-
+        console.log(start, end, 111)
         // Отправляем запрос внутри setFilters callback, чтобы использовать актуальные данные
-        if (start || end || updatedFilters.companies.length || updatedFilters.sellers.length || 
+        if (start !== undefined || end !== undefined || updatedFilters.companies.length || updatedFilters.sellers.length || 
             updatedFilters.statuses.length || updatedFilters.sum?.from || updatedFilters.sum?.to) {
+              console.log('send')
           dispatch(fetchUserApplications({
             userId: id,
             filters: apiFilters,
@@ -92,7 +93,7 @@ const DetailedClient = () => {
         return updatedFilters;
       });
     }
-  }, [dispatch, id]); // Убираем filters из зависимостей
+  }; // Убираем filters из зависимостей
   // console.log(filters, 'filters')
   const handleSumChange = useCallback((from: number | null, to: number | null) => {
     if (id) {

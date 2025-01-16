@@ -33,6 +33,7 @@ interface PageTitleProps {
   onSave?: () => void;
   onCancel?: () => void;
   date?: string;
+  clientId?: string;
 }
 
 const PageTitle: React.FC<PageTitleProps> = ({
@@ -45,6 +46,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
   isCompany = false,
   isUser = false,
   handleUpdateUser,
+  clientId,
   editing = false,
   userDeskr,
   setEditing,
@@ -84,7 +86,10 @@ const PageTitle: React.FC<PageTitleProps> = ({
 
   const handleDateClick = () => {
     if (date) {
-      navigate(`/admin/applications?date=${encodeURIComponent(date)}`);
+      // Преобразуем дату из формата DD/MM/YYYY в YYYY-MM-DD
+      const [day, month, year] = date.split('/');
+      const formattedDate = `${year}-${month}-${day}`;
+      navigate(`/admin/applications?date=${encodeURIComponent(formattedDate)}`);
     }
   };
 
@@ -113,7 +118,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
                 variant="white"
                 icon={<ChangeStatus />}
                 label="Отмена"
-                style={{ height: "32px", width: "100px" }}
+                style={{ height: "32px", width: "200px" }}
                 styleLabel={{ fontSize: "14px" }}
               />
             ) : (
@@ -230,7 +235,11 @@ const PageTitle: React.FC<PageTitleProps> = ({
                   <DetailedAvatar />
                 </div>
                 
-                <p>{name}</p>
+                <p onClick={() => {
+                  if (clientId) {
+                    navigate(`/admin/detailed-client/${clientId}`);
+                  }
+                }}>{name}</p>
               </div>}
             </div>
           </div>

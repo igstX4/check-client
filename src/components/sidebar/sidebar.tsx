@@ -6,6 +6,7 @@ import applications from '../../assets/zayavki.png'
 import checki from '../../assets/4eki.png'
 import clients from '../../assets/clients.png'
 import companies from '../../assets/companies.png'
+import { logout as logoutAction } from '../../store/slices/adminSlice'
 import settings from '../../assets/settings.png'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -15,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { fetchActiveApplicationsCount } from '../../store/slices/applicationSlice';
 import { AppDispatch } from '../../store/store';
 import { useAppSelector } from '../../hooks/redux'
+import { ActiveIcon, AllIcon, ChecksIcon, ClientsIcon, CompaniesIcon, SettingsIcon } from './sidesvgs'
 
 const Sidebar = () => {
    const navigate = useNavigate();
@@ -33,33 +35,33 @@ const Sidebar = () => {
    const menuItems = [
       {
          path: '/admin/active-applications',
-         icon: <img src={active} alt="/" />,
+         icon: <ActiveIcon />,
          label: 'Активные заявки',
          badge: activeApplicationsCount
       },
       {
          path: '/admin/applications',
-         icon: <img src={applications} alt="/" />,
+         icon: <AllIcon />,
          label: 'Заявки'
       },
       {
          path: '/admin/checks',
-         icon: <img src={checki} alt="/" />,
+         icon: <ChecksIcon />,
          label: 'Чеки'
       },
       {
          path: '/admin/clients',
-         icon: <img src={companies} alt="/" />,
+         icon: <ClientsIcon />,
          label: 'Клиенты'
       },
       {
          path: '/admin/companies',
-         icon: <img src={active} alt="/" />,
+         icon: <CompaniesIcon />,
          label: 'Компании'
       },
       {
          path: '/admin/settings/sellers',
-         icon: <img src={settings} alt="/" />,
+         icon: <SettingsIcon />,
          label: 'Настройки'
       }
    ];
@@ -68,13 +70,16 @@ const Sidebar = () => {
       <div className={styles.navBarWrapper}>
          <div className={styles.user}>
             <div className={styles.userInfo}>
-               <img src={avatar} className={styles.avatar} alt="/" />
+               {/* <img src={avatar} className={styles.avatar} alt="/" /> */}
+               <div className={styles.avatar1}>
+                  <p>{currentAdmin?.name?.charAt(0)}</p>
+               </div>
                <div>
                   <h2>{currentAdmin?.name}</h2>
                   <p>Администратор</p>
                </div>
             </div>
-            <img src={logout} className={styles.logout} alt="/" />
+            <img style={{cursor: 'pointer'}} onClick={() => dispatch(logoutAction())} src={logout} className={styles.logout} alt="/" />
          </div>
          <ul className={styles.menu}>
             {menuItems.map((item, index) => (

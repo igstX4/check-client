@@ -22,7 +22,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { applications = [], pagination, isLoading } = useSelector((state: RootState) => state.application);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dateParam = searchParams.get('date');
   // console.log(applications);
   const [showSearch, setShowSearch] = useState(false);
@@ -52,8 +52,8 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
       companies: filters.companies,
       sellers: filters.sellers,
       statuses: filters.status ? filters.status.split(',').filter(Boolean) : [],
-      dateStart: filters.date.start,
-      dateEnd: filters.date.end,
+      dateStart: dateParam || filters.date.start,
+      dateEnd: dateParam || filters.date.end,
       sumFrom: filters.sum?.from || '',
       sumTo: filters.sum?.to || ''
     };
@@ -68,7 +68,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
       },
       activeOnly: isActiveOnly
     }));
-  }, [dispatch, filters, pagination.page, pagination.limit, isActiveOnly]);
+  }, [dispatch, filters, dateParam, pagination.page, pagination.limit, isActiveOnly]);
 
   useEffect(() => {
     loadApplications();
@@ -76,8 +76,15 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
 
   useEffect(() => {
     if (dateParam) {
-      // Здесь логика фильтрации по дате
-      // fetchApplicationsByDate(dateParam);
+      console.log(dateParam, 111)
+      setFilters(prev => ({
+        ...prev,
+        date: { 
+          start: dateParam,
+          end: dateParam
+        }
+      }));
+      console.log(filters, 'filters')
     }
   }, [dateParam]);
 
@@ -188,6 +195,18 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
     console.log('Exporting as:', type, 'with filters:', exportFilters);
   };
 
+  const handleRemoveDateFilter = () => {
+    // Очищаем состояние фильтра
+    setFilters(prev => ({
+      ...prev,
+      date: { start: '', end: '' }
+    }));
+    
+    // Удаляем параметр из URL
+    searchParams.delete('date');
+    setSearchParams(searchParams);
+  };
+
   // if (isLoading) {
   //   return <div>Загрузка...</div>;
   // }
@@ -228,6 +247,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
         onFilterChange={handleFilterChange}
         filters={filters}
         onFiltersChange={setFilters}
+        onRemoveDateFilter={handleRemoveDateFilter}
       />
       
       <ActiveTable
