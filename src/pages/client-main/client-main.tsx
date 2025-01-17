@@ -16,7 +16,7 @@ import { getAllSellers } from '../../store/slices/sellerSlice'
 import { createApplication } from '../../store/slices/applicationSlice'
 import { useNotification } from '../../contexts/NotificationContext/NotificationContext'
 import { useNavigate } from 'react-router-dom'
-import { fetchSavedCompanies } from '../../store/slices/clientSlice'
+import { fetchSavedCompanies, logout } from '../../store/slices/clientSlice'
 
 interface CheckData {
     id?: string;
@@ -274,6 +274,10 @@ const ClientMain = () => {
                         variant='white' 
                         style={{ width: '85px', height: '32px' }} 
                         icon={<img src={logOut} alt="logOut" />} 
+                        onClick={() => {
+                            dispatch(logout())
+                            navigate('/')
+                        }}
                         styleLabel={{ color: '#14151A', fontSize: '14px', fontWeight: '500' }} 
                     />
                 </div>
