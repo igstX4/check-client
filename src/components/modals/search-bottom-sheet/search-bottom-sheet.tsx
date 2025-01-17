@@ -155,7 +155,7 @@ const SearchBottomSheet = <T,>({
                 placeholder="Поиск"
                 value={localSearchQuery}
                 onChange={(e) => handleLocalSearchChange(e.target.value)}
-                autoFocus
+                // autoFocus
               />
             </div>
           </div>
