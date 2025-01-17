@@ -46,7 +46,6 @@ interface CheckData {
 const Checks = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { checks, pagination, isLoading } = useSelector((state: RootState) => state.check);
-  console.log(checks);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     date: { start: '', end: '' },

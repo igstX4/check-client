@@ -102,7 +102,6 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
     users: [],
     status: '',
   });
-  console.log(externalFilters, 222)
   const navigate = useNavigate();
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   // console.log(data, 22)
@@ -121,15 +120,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
 
   useEffect(() => {
     if (isMobile && externalFilters) {
-      console.log('External Filters:', {
-        date: externalFilters.date,
-        users: externalFilters.users,
-        companies: externalFilters.companies,
-        sellers: externalFilters.sellers,
-        status: externalFilters.status,
-        statuses: externalFilters.statuses,
-        sum: externalFilters.sum
-      });
+      // console.log('External Filters:', {...})
     }
   }, [isMobile, externalFilters]);
 
