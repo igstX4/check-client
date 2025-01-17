@@ -83,6 +83,21 @@ const Clients = () => {
     }
   };
 
+  const copyToClipboard = (text: string) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      addNotification('Ссылка скопирована', 'success');
+    } catch {
+      addNotification('Ошибка при копировании', 'error');
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  };
+
   const getRowMenuOptions = (client: any) => [
     {
       id: 'profile',
@@ -106,18 +121,14 @@ const Clients = () => {
       id: 'link',
       label: 'Ссылка на вход для клиента',
       onClick: () => {
-        console.log(client, 12)
         const link = `${window.location.origin}/client/login/${client.key}`;
-        navigator.clipboard.writeText(link)
-          .then(() => addNotification('Ссылка скопирована', 'success'))
-          .catch(() => addNotification('Ошибка при копировании', 'error'));
+        copyToClipboard(link);
       }
     },
     {
       id: 'block',
       label: client.isBlocked ? 'Разблокировать клиента' : 'Удалить клиента',
       onClick: () => {
-        console.log(213)
         setCurrentUser(client);
         setIsDeleteUser(true);
       },
