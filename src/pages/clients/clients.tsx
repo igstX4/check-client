@@ -185,7 +185,10 @@ const Clients = () => {
         clientId={currentUser?._id || ''}
       />
       <div className={s.clients_header}>
+        <div className={s.header_left}>
         <h1>Клиенты</h1>
+        <h2 onClick={() => setIsCreating(true)} className={s.registration}>Регистрация</h2>
+        </div>
         <Button
           variant='purple'
           label='Зарегистрировать нового клиента'

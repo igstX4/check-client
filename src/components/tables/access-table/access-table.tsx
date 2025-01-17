@@ -70,7 +70,7 @@ const CardItem = memo(({ item, getRowMenuOptions }: TableRowProps) => {
     <div className={styles.card}>
       <div className={styles.cardHeader}>
         <div className={styles.userInfo}>
-          <DetailedAvatar />
+          {/* <DetailedAvatar /> */}
           <div className={styles.userDetails}>
             <span className={styles.userName}>{item.name}</span>
             <span className={styles.userLogin}>{item.login}</span>

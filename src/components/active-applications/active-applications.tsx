@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
-import { fetchApplications } from '../../store/slices/applicationSlice';
+import { fetchApplications, selectActiveApplicationsCount } from '../../store/slices/applicationSlice';
 import styles from './active-applications.module.scss';
 import SelectGroup from '../select-group/select-group';
 import ActiveTable from '../tables/active-table/active-table';
@@ -25,6 +25,8 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
   const [searchParams, setSearchParams] = useSearchParams();
   const dateParam = searchParams.get('date');
   // console.log(applications);
+  const activeApplicationsCount = useSelector(selectActiveApplicationsCount);
+
   const [showSearch, setShowSearch] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     date: { start: '', end: '' },
@@ -135,7 +137,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
       }
     }));
   }, [dispatch, filters.date]);
-  console.log(filters, pagination.limit)
+  console.log(filters, 'test_filters')
   const handleSumChange = (from: number | null, to: number | null) => {
     setFilters(prev => ({
       ...prev,
@@ -232,7 +234,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
           className={`${styles.tabButton} ${isActiveOnly ? styles.active : ''}`}
           onClick={() => navigate('/admin/active-applications')}
         >
-          Активные <span className={styles.count}>3</span>
+          Активные <span className={styles.count}>{activeApplicationsCount}</span>
         </button>
         <button 
           className={`${styles.tabButton} ${!isActiveOnly ? styles.active : ''}`}
@@ -260,6 +262,9 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
         showSearch={showSearch}
         onExport={() => setIsExportModalOpen(true)}
         setShowSearch={setShowSearch}
+        filters={filters}
+        onMobileFiltersChange={setFilters}
+        hideCompanyColumn={false}
       />
       
       {!isLoading && pagination && (

@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { fetchActiveApplicationsCount } from '../../store/slices/applicationSlice';
 import { AppDispatch } from '../../store/store';
 import { useAppSelector } from '../../hooks/redux'
+import { adminApi } from '../../api/axios'
 import { ActiveIcon, AllIcon, ChecksIcon, ClientsIcon, CompaniesIcon, SettingsIcon } from './sidesvgs'
 
 const Sidebar = () => {

@@ -74,7 +74,7 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { companies, sellers, users, isLoading } = useSelector((state: RootState) => state.selectors);
-
+   console.log('companies', companies)
   // Загружаем селекторы только один раз при монтировании
   useEffect(() => {
     if (!companies.length && !sellers.length && !users.length) {

@@ -17,6 +17,14 @@
         }
     }
 
+    .registration {
+        font-size: 17px;
+        font-weight: 400;
+        color: #924FE8;
+        margin: 0;
+        display: none;
+    }
+
     .tableContainer {
         background: #FFFFFF;
         border: 1px solid #DEE0E3;
@@ -264,9 +272,27 @@
 @media screen and (max-width: 600px) {
     .clients {
         // padding: 16px;
+        .registration {
+            display: block;
+            cursor: pointer;
+        }
+        .header_left{
+            margin-top: 20px;
+            display: flex;
+            // gap: 30px;
+            justify-content: space-between;
+            width: 60%;
+            @media screen and (max-width: 400px) {
+                width: 65% !important;
+            }
 
+        }
         .clients_header {
             margin-bottom: 16px;
+            display: flex;
+            justify-content: flex-end;
+            border-bottom: 1px solid #0000004D;
+            padding-bottom: 10px;
 
             h1 {
                 font-size: 20px;

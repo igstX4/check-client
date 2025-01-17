@@ -11,6 +11,9 @@ import ApplicationsSearchBottomSheet from '../../modals/applications-search-bott
 import { useNavigate } from 'react-router-dom';
 import LoadingSlider from '../../ui/loading-slider/loading-slider';
 import ExportModal from '../../modals/export-modal/export-modal';
+import AppliedFilters from '../../ui/applied-filters/applied-filters';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 //
 interface ActiveTableProps {
   data: TableData[];
@@ -47,6 +50,7 @@ interface TableData {
     id?: string;
     name?: string;
     inn?: string;
+    _id?: string;
   };
   checksCount?: number;
   totalAmount?: number;
@@ -98,9 +102,12 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
     users: [],
     status: '',
   });
+  console.log(externalFilters, 222)
   const navigate = useNavigate();
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   // console.log(data, 22)
+  const { companies, sellers } = useSelector((state: RootState) => state.selectors);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 600);
@@ -111,6 +118,20 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    if (isMobile && externalFilters) {
+      console.log('External Filters:', {
+        date: externalFilters.date,
+        users: externalFilters.users,
+        companies: externalFilters.companies,
+        sellers: externalFilters.sellers,
+        status: externalFilters.status,
+        statuses: externalFilters.statuses,
+        sum: externalFilters.sum
+      });
+    }
+  }, [isMobile, externalFilters]);
 
   const safeData = Array.isArray(data) ? data : [];
   
@@ -265,7 +286,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
     if (!statuses?.length) return null;
 
     // Показываем все статусы, если их 2 или меньше
-    if (statuses.length <= 2) {
+    if (statuses.length <= 1) {
       return statuses.map((status, index) => (
         <StatusBadge
           key={`${status}-${index}`}
@@ -277,14 +298,14 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
     // Если статусов больше 2, показываем первые 2 и счетчик
     return (
       <>
-        {statuses.slice(0, 2).map((status, index) => (
+        {statuses.slice(0, 1).map((status, index) => (
           <StatusBadge
             key={`${status}-${index}`}
             status={status}
           />
         ))}
         <div className={`${styles.badge} ${styles.more}`}>
-          +{statuses.length - 2}
+          +{statuses.length - 1}
         </div>
       </>
     );
@@ -406,6 +427,83 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
                     </button>
                 </div>
             </div>
+        )}
+        {isMobile && externalFilters && (
+          <AppliedFilters
+            dateFilter={(() => {
+              if (!externalFilters.date?.start && !externalFilters.date?.end) return undefined;
+              const dateStr = `${externalFilters.date.start || ''} – ${externalFilters.date.end || ''}`.trim();
+              return dateStr === '–' ? undefined : dateStr;
+            })()}
+            clientFilters={(() => {
+              if (!externalFilters.users?.length) return [];
+              return externalFilters.users
+                .map(user => typeof user === 'object' ? user.name : user)
+                .filter(Boolean);
+            })()}
+            companyFilters={(() => {
+              if (!externalFilters.companies?.length) return [];
+              
+              return externalFilters.companies
+                .map(companyId => {
+                  const company = companies.find(c => c.id === companyId);
+                  return company?.name || '';
+                })
+                .filter(name => name.length > 0);
+            })()}
+            sellerFilters={(() => {
+              if (!externalFilters.sellers?.length) return [];
+              
+              return externalFilters.sellers
+                .map(sellerId => {
+                  const seller = sellers.find(s => s.id === sellerId);
+                  return seller?.name || '';
+                })
+                .filter(name => name.length > 0);
+            })()}
+            statusFilters={(() => {
+              const statuses = [];
+              if (externalFilters.status) statuses.push(externalFilters.status);
+              if (externalFilters.statuses?.length) statuses.push(...externalFilters.statuses);
+              return [...new Set(statuses)];
+            })()}
+            sumFilter={(() => {
+              if (!externalFilters.sum) return undefined;
+              const { from, to } = externalFilters.sum;
+              if (!from && !to) return undefined;
+              return { from, to };
+            })()}
+            onRemoveFilter={(type) => {
+              const newFilters = { ...externalFilters };
+              switch (type) {
+                case 'client':
+                  newFilters.users = [];
+                  break;
+                case 'company':
+                  newFilters.companies = [];
+                  break;
+                case 'seller':
+                  newFilters.sellers = [];
+                  break;
+                case 'status':
+                  newFilters.status = '';
+                  newFilters.statuses = [];
+                  break;
+                case 'sum':
+                  newFilters.sum = { from: '', to: '' };
+                  break;
+              }
+              onMobileFiltersChange?.(newFilters);
+            }}
+            onRemoveDateFilter={() => {
+              const newFilters = {
+                ...externalFilters,
+                date: { start: '', end: '' }
+              };
+              onMobileFiltersChange?.(newFilters);
+            }}
+            hideCompanyFilterDisplay={hideCompanyColumn}
+          />
         )}
         <div className={styles.container} data-view-mode={viewMode}>
             {!isMobile && (

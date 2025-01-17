@@ -16,23 +16,31 @@ import ExportChecksModal from '../../components/modals/export-checks-modal/expor
 interface CheckData {
   id: string;
   date: string;
-  company: {
+  application: {
     id: string;
-    name: string;
-    inn: string;
-  };
-  seller: {
-    id: string;
-    name: string;
-    inn: string;
-    isElite?: boolean;
-  };
+    company: {
+      id: string;
+      name: string;
+      inn: string;
+    } | null;
+    seller: {
+      id: string;
+      name: string;
+      inn: string;
+      type: 'white' | 'elite';
+    } | null;
+    user: {
+      id: string;
+      name: string;
+      inn: string;
+    } | null;
+    totalAmount?: number;
+    checksCount?: number;
+  } | null;
   product: string;
   unit: string;
-  quantity: string;
-  priceForOne: string;
-  fullPrice: string;
-  vat: string;
+  quantity?: number;
+  pricePerUnit?: number;
 }
 
 const Checks = () => {
@@ -212,6 +220,7 @@ const Checks = () => {
 
       <NewChecksTable 
         data={checks}
+        initialData={checks}
         onFilterOpen={() => setIsFilterOpen(true)}
         isSearchOpen={isSearchOpen}
         setIsSearchOpen={setIsSearchOpen}
@@ -221,6 +230,9 @@ const Checks = () => {
         setViewMode={setViewMode}
         isLoading={isLoading}
         onExport={handleExport}
+        filters={filters}
+        onMobileFiltersChange={handleMobileFilterChange}
+        hideCompanyColumn={false}
       />
 
       {!isLoading && pagination && (

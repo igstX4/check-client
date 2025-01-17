@@ -5,6 +5,10 @@ import RowMenu from '../../ui/row-menu/row-menu';
 import { useNavigate } from 'react-router-dom';
 import LoadingSlider from '../../ui/loading-slider/loading-slider';
 import Pagination from '../../ui/pagination/pagination';
+import AppliedFilters from '../../ui/applied-filters/applied-filters';
+import { FilterState } from '../../../types/filter-state';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
 interface CheckData {
   id: string;
@@ -55,6 +59,9 @@ interface NewChecksTableProps {
     pages: number;
   };
   onPageChange?: (page: number) => void;
+  filters?: FilterState;
+  onMobileFiltersChange?: (filters: FilterState) => void;
+  initialData: CheckData[];
 }
 
 const NewChecksTable: React.FC<NewChecksTableProps> = ({ 
@@ -70,11 +77,15 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
   onExport,
   hideCompanyColumn,
   pagination,
-  onPageChange
+  onPageChange,
+  filters,
+  onMobileFiltersChange,
+  initialData
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
+  const { companies, sellers } = useSelector((state: RootState) => state.selectors);
 
   useEffect(() => {
     const handleResize = () => {
@@ -322,6 +333,64 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
           </div>
         </div>
       )}
+      {isMobile && filters && (
+        <div style={{marginBottom: '10px'}}><AppliedFilters
+          dateFilter={(() => {
+            if (!filters.date?.start && !filters.date?.end) return undefined;
+            const dateStr = `${filters.date.start || ''} – ${filters.date.end || ''}`.trim();
+            return dateStr === '–' ? undefined : dateStr;
+          })()}
+          clientFilters={[]}
+          companyFilters={(() => {
+            if (!filters.companies?.length) return [];
+            return filters.companies
+              .map(companyId => {
+                const company = companies.find(c => c.id === companyId);
+                return company?.name || '';
+              })
+              .filter(name => name.length > 0);
+          })()}
+          sellerFilters={(() => {
+            if (!filters.sellers?.length) return [];
+            return filters.sellers
+              .map(sellerId => {
+                const seller = sellers.find(s => s.id === sellerId);
+                return seller?.name || '';
+              })
+              .filter(name => name.length > 0);
+          })()}
+          statusFilters={[]}
+          sumFilter={(() => {
+            if (!filters.sum) return undefined;
+            const { from, to } = filters.sum;
+            if (!from && !to) return undefined;
+            return { from, to };
+          })()}
+          onRemoveFilter={(type) => {
+            const newFilters = { ...filters };
+            switch (type) {
+              case 'company':
+                newFilters.companies = [];
+                break;
+              case 'seller':
+                newFilters.sellers = [];
+                break;
+              case 'sum':
+                newFilters.sum = { from: '', to: '' };
+                break;
+            }
+            onMobileFiltersChange?.(newFilters);
+          }}
+          onRemoveDateFilter={() => {
+            const newFilters = {
+              ...filters,
+              date: { start: '', end: '' }
+            };
+            onMobileFiltersChange?.(newFilters);
+          }}
+          hideCompanyFilterDisplay={hideCompanyColumn}
+        />
+      </div>)}
       <div className={styles.container} data-view-mode={viewMode}>
         {!isMobile && (
           <div className={styles.searchWrapper}>

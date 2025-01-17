@@ -26,6 +26,16 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   onRemoveDateFilter,
   hideCompanyFilterDisplay = false
 }) => {
+  console.log('Applied Filters Props:', {
+    dateFilter,
+    clientFilters,
+    companyFilters,
+    sellerFilters,
+    statusFilters,
+    sumFilter,
+    hideCompanyFilterDisplay
+  });
+
   const truncateText = (text: string, maxLength: number = 15) => {
     if (text.length <= maxLength) return text;
     return `${text.slice(0, maxLength)}...`;
@@ -36,8 +46,15 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   };
 
   const renderFilterItem = (type: string, values: string[]) => {
-    if (type === 'company' && hideCompanyFilterDisplay) return null;
-    if (values.length === 0) return null;
+    console.log('Rendering filter item:', type, values);
+    if (type === 'company' && hideCompanyFilterDisplay) {
+      console.log('Skipping company filter due to hideCompanyFilterDisplay');
+      return null;
+    }
+    if (values.length === 0) {
+      console.log('Skipping empty filter:', type);
+      return null;
+    }
 
     let label = '';
     switch (type) {
@@ -121,11 +138,22 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
       companyFilters.length === 0 && 
       sellerFilters.length === 0 && 
       statusFilters.length === 0 && 
-      !sumFilter) return null;
+      !sumFilter?.from && 
+      !sumFilter?.to) {
+    console.log('No filters to display');
+    return null;
+  }
 
   return (
     <div className={styles.appliedFilters}>
-      {renderDateFilter()}
+      {dateFilter && (
+        <div className={styles.filterItem}>
+          <span>По дате: {dateFilter}</span>
+          <button onClick={onRemoveDateFilter}>
+            <Close />
+          </button>
+        </div>
+      )}
       {renderFilterItem('client', clientFilters)}
       {renderFilterItem('company', companyFilters)}
       {renderFilterItem('seller', sellerFilters)}

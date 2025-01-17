@@ -24,6 +24,7 @@ import s from "./application-detailed.module.scss";
 import HistoryTable from "../../components/tables/history-table/history-table";
 import SellerSelect from "../../components/ui/seller-select/seller-select";
 import AddCheckModal from "../../components/modals/add-check-modal/add-check-modal";
+import Loader from "../../components/ui/loader/loader";
 
 const INITIAL_APPLICATION_INFO: ApplicationInfo = {
   seller: {
@@ -267,7 +268,7 @@ const ApplicationDetailed: React.FC = () => {
   };
 
   if (isLoading || !currentApplication) {
-    return <div>Загрузка...</div>;
+    return <Loader />;
   }
 
   return (
@@ -350,6 +351,7 @@ const ApplicationDetailed: React.FC = () => {
             ''}
         checksCount={currentApplication?.checksCount || 0}
         sumWithVat={currentApplication?.totalAmount || '0'}
+        onAddCheck={editing ? () => setIsAddCheckModalOpen(true) : undefined}
         vat={currentApplication?.vat || '0'}
       />
 

@@ -61,10 +61,12 @@ const ChecksInfo: React.FC<ChecksInfoProps> = ({
             <div className={s.label}>НДС 20%:</div>
             <div className={s.value}>{vat}</div>
           </div>
-          <button className={s.addCheckButton} onClick={onAddCheck}>
-            <Plus />
-            Добавить чек
-          </button>
+          {onAddCheck && (
+            <button className={s.addCheckButton} onClick={onAddCheck}>
+              <Plus />
+              Добавить чек
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ import ClientMain from '../pages/client-main/client-main';
 import ClientLogin from '../pages/client-login/client-login';
 import ProtectedClientRoute from '../components/protected-route/client-route';
 import ClientLayout from '../layouts/client-layout/client-layout';
+import Loader from '../components/ui/loader/loader';
 const AdminLogin = lazy(() => import('../pages/admin-login/admin-login'));
 const PanelLayout = lazy(() => import('../layouts/panel-layout/panel-layout'));
 const ActiveApplications = lazy(() => import('../components/active-applications/active-applications'));
@@ -101,7 +102,7 @@ const router = createBrowserRouter([
 function App() {
    return (
       <AppProviders>
-         <Suspense fallback={<div>Loading...</div>}>
+         <Suspense fallback={<Loader />}>
             <NotificationProvider>
                <RouterProvider router={router} />
             </NotificationProvider>
