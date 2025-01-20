@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api';
-// const API_URL = 'http://138.124.78.106/api';
+// const API_URL = 'http://localhost:4000/api';
+const API_URL = 'http://138.124.78.106/api';
 
 // Инстанс для клиентских запросов
 export const clientApi = axios.create({
