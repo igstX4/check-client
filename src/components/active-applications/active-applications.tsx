@@ -13,6 +13,7 @@ import { DownloadSvg } from '../svgs/svgs';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ApplicationsSearchBottomSheet from '../modals/applications-search-bottom-sheet/applications-search-bottom-sheet';
 import ExportModal from '../modals/export-modal/export-modal';
+import MobileHeader from '../mobile-header/mobile-header';
 
 interface ActiveApplicationsProps {
   isActiveOnly?: boolean;
@@ -24,6 +25,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
   const { applications = [], pagination, isLoading } = useSelector((state: RootState) => state.application);
   const [searchParams, setSearchParams] = useSearchParams();
   const dateParam = searchParams.get('date');
+  const sellersParam = searchParams.get('sellers');
   // console.log(applications);
   const activeApplicationsCount = useSelector(selectActiveApplicationsCount);
 
@@ -52,7 +54,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
     const apiFilters = {
       clients: filters.users.map(user => user.id),
       companies: filters.companies,
-      sellers: filters.sellers,
+      sellers: sellersParam ? sellersParam.split(',') : filters.sellers,
       statuses: filters.status ? filters.status.split(',').filter(Boolean) : [],
       dateStart: dateParam || filters.date.start,
       dateEnd: dateParam || filters.date.end,
@@ -70,25 +72,24 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
       },
       activeOnly: isActiveOnly
     }));
-  }, [dispatch, filters, dateParam, pagination.page, pagination.limit, isActiveOnly]);
+  }, [dispatch, filters, dateParam, sellersParam, pagination.page, pagination.limit, isActiveOnly]);
 
   useEffect(() => {
     loadApplications();
   }, [loadApplications]);
 
   useEffect(() => {
-    if (dateParam) {
-      console.log(dateParam, 111)
+    if (dateParam || sellersParam) {
       setFilters(prev => ({
         ...prev,
-        date: { 
+        date: dateParam ? { 
           start: dateParam,
           end: dateParam
-        }
+        } : prev.date,
+        sellers: sellersParam ? sellersParam.split(',') : prev.sellers
       }));
-      console.log(filters, 'filters')
     }
-  }, [dateParam]);
+  }, [dateParam, sellersParam]);
 
   const handleDateChange = (start: string, end: string) => {
     // console.log('Date change:', start, end);
@@ -118,6 +119,14 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
       sum: newFilters.sum || { from: '', to: '' }
     }));
 
+    // Обновляем URL при изменении sellers
+    if (newFilters.sellers.length > 0) {
+      searchParams.set('sellers', newFilters.sellers.join(','));
+    } else {
+      searchParams.delete('sellers');
+    }
+    setSearchParams(searchParams);
+
     const apiFilters = {
       clients: newFilters.clients,
       companies: newFilters.companies,
@@ -136,7 +145,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
         limit: 10
       }
     }));
-  }, [dispatch, filters.date]);
+  }, [dispatch, filters.date, searchParams, setSearchParams]);
   console.log(filters, 'test_filters')
   const handleSumChange = (from: number | null, to: number | null) => {
     setFilters(prev => ({
@@ -198,14 +207,23 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
   };
 
   const handleRemoveDateFilter = () => {
-    // Очищаем состояние фильтра
     setFilters(prev => ({
       ...prev,
       date: { start: '', end: '' }
     }));
     
-    // Удаляем параметр из URL
     searchParams.delete('date');
+    setSearchParams(searchParams);
+  };
+
+  // Добавляем новую функцию для удаления фильтра продавцов
+  const handleRemoveSellerFilter = () => {
+    setFilters(prev => ({
+      ...prev,
+      sellers: []
+    }));
+    
+    searchParams.delete('sellers');
     setSearchParams(searchParams);
   };
 
@@ -227,7 +245,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
         />
       </div>
       <div className={styles.mobileHeader}>
-        <h1>{isActiveOnly ? 'Активные заявки' : 'Заявки'}</h1>
+        <MobileHeader title={isActiveOnly ? 'Активные заявки' : 'Заявки'} />
       </div>
       <div className={styles.mobileTabsContainer}>
         <button 
@@ -250,6 +268,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
         filters={filters}
         onFiltersChange={setFilters}
         onRemoveDateFilter={handleRemoveDateFilter}
+        onRemoveSellerFilter={handleRemoveSellerFilter}
       />
       
       <ActiveTable
@@ -265,6 +284,8 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
         filters={filters}
         onMobileFiltersChange={setFilters}
         hideCompanyColumn={false}
+        onRemoveDateFilter={handleRemoveDateFilter}
+        onRemoveSellerFilter={handleRemoveSellerFilter}
       />
       
       {!isLoading && pagination && (

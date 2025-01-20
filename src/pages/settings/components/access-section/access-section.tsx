@@ -157,8 +157,9 @@ const AccessSection = () => {
 
     return (
         <div className={s.accessSection}>
-            <div className={s.pagetitile}>
+            <div style={{marginBottom: '20px'}} className={s.pagetitile}>
                 <PageTitle 
+                    marginTopZero={true}
                     responsive_name='Доступы' 
                     responsive_btns={[{text: 'Регистрация', onClick: handleAddAccess}]}
                 />

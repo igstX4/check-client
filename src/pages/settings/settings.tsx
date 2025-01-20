@@ -3,11 +3,14 @@ import s from './settings.module.scss'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import logout from '../../assets/logout.png'
 import { BuildingsIcon, KeyIcon } from '../../components/svgs/svgs';
-
+import MobileHeader from '../../components/mobile-header/mobile-header';
+import { useAppDispatch } from '../../hooks/redux';
+import { logout as logoutAction } from '../../store/slices/adminSlice';
 
 const Settings = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const activeTab = location.pathname.includes('access') ? 'access' : location.pathname.includes('sellers') ? 'sellers' : '';
 
   return (
@@ -30,9 +33,7 @@ const Settings = () => {
         </div>
       </div>
       {activeTab === "" && <div className={s.mobile}>
-        <div className={s.mobile_header}>
-          <h2>Настройки</h2>
-        </div>
+        <MobileHeader title={'Настройки'}/>
         <div className={s.mobile_content}>
           <div className={s.account}>
             <div className={s.left}>
@@ -42,7 +43,7 @@ const Settings = () => {
                 <p>Администратор</p>
               </div>
             </div>
-            <div className={s.logout}><img src={logout} alt="/" /></div>
+            <div onClick={() => dispatch(logoutAction())} className={s.logout}><img src={logout} alt="/" /></div>
           </div>
           <div className={s.hr}></div>
           <div onClick={() => navigate('/admin/settings/sellers')} className={s.link}>

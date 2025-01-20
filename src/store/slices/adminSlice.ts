@@ -88,7 +88,7 @@ export const updateAdmin = createAsyncThunk(
   'admin/updateAdmin',
   async ({ adminId, data }: { adminId: string; data: any }, { rejectWithValue }) => {
     try {
-      const response = await adminApi.put(`/admin/updateAdmin/${adminId}`, data);
+      const response = await adminApi.put(`/admin/${adminId}`, data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Произошла ошибка при обновлении администратора');

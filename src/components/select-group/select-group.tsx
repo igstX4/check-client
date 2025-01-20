@@ -34,6 +34,7 @@ interface SelectGroupProps {
   hideCompanyFilterDisplay?: boolean;
   useMobileView?: boolean;
   onRemoveDateFilter: () => void;
+  onRemoveSellerFilter: () => void;
 }
 
 interface SelectOption {
@@ -70,7 +71,8 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
   hideCompanyFilter = false,
   hideCompanyFilterDisplay = false,
   useMobileView = false,
-  onRemoveDateFilter
+  onRemoveDateFilter,
+  onRemoveSellerFilter
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { companies, sellers, users, isLoading } = useSelector((state: RootState) => state.selectors);
@@ -203,6 +205,11 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
   };
 
   const handleRemoveFilter = (type: string) => {
+    if (type === 'seller') {
+      onRemoveSellerFilter();
+      return;
+    }
+    
     // Формируем новые фильтры в зависимости от типа
     const newFilters = {
       clients: type === 'client' ? [] : selectOptions.client.filter(opt => opt.checked).map(opt => opt.id),

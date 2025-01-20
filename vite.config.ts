@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate', // Автоматическое обновление сервис-воркера
+      registerType: 'autoUpdate',
       manifest: {
         name: 'Check Platform',
         short_name: 'Check Platform',
@@ -17,13 +17,26 @@ export default defineConfig({
         scope: '/',
         start_url: '/',
         icons: [
-
           {
             src: '/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },
-          
+        ],
+      },
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/api\.example\.com\/.*$/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 3600, // 1 час
+              },
+            },
+          },
         ],
       },
     }),

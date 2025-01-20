@@ -16,12 +16,20 @@ import ProtectedClientRoute from '../components/protected-route/client-route';
 import ClientLayout from '../layouts/client-layout/client-layout';
 import Loader from '../components/ui/loader/loader';
 const AdminLogin = lazy(() => import('../pages/admin-login/admin-login'));
+import styles from '../layouts/client-layout/client-layout.module.scss'
+import { ClientSuccess } from '../pages/client-success/client-success';
 const PanelLayout = lazy(() => import('../layouts/panel-layout/panel-layout'));
 const ActiveApplications = lazy(() => import('../components/active-applications/active-applications'));
 const ApplicationDetailed = lazy(() => import('../pages/application-detailed/application-detailed'));
 const Checks = lazy(() => import('../pages/checks/checks'));
 
 const router = createBrowserRouter([
+   {
+      path: "/",
+      element: <div className={styles.container}>
+      <h1>Для доступа на платформу используйте персональную ссылку</h1>
+   </div>
+   },
    {
       path: "/admin/login",
       element: <AdminLogin />,
@@ -30,6 +38,7 @@ const router = createBrowserRouter([
       path: "/client/login/:key",
       element: <ClientLogin />,
    },
+  
    {
       path: "/client",
       element: <ClientLayout />,
@@ -37,7 +46,11 @@ const router = createBrowserRouter([
          {
             path: "main",
             element: <ClientMain />
-         }
+         },
+         {
+            path: "success",
+            element: <ClientSuccess />,
+         },
       ]
    },
    {

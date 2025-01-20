@@ -14,6 +14,21 @@ interface DateSelectorProps {
   defaultEndDate?: string;
 }
 
+const HOLIDAYS = [
+  "1-01", // Новогодние каникулы
+  "2-01", // Новогодние каникулы
+  "3-01", // Новогодние каникулы
+  "4-01", // Новогодние каникулы
+  "5-01", // Новогодние каникулы
+  "7-01", // Рождество Христово
+  "23-02", // День защитника Отечества
+  "8-03", // Международный женский день
+  "1-05", // Праздник Весны и Труда
+  "9-05", // День Победы
+  "12-06", // День России
+  "4-11" // День народного единства
+];
+
 const DateSelector: React.FC<DateSelectorProps> = ({ 
   onDateChange, 
   fullWidth = false,
@@ -41,12 +56,36 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     return `${year}-${month}-${day}`; // формат YYYY-MM-DD
   };
 
+  const isDateDisabled = (date: Date): boolean => {
+    if (!singleDate) return false;
+
+    // Проверка на выходные
+    const day = date.getDay();
+    const isWeekend = day === 0 || day === 6;
+
+    // Проверка на праздники
+    const dateString = `${date.getDate()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    const isHoliday = HOLIDAYS.includes(dateString);
+
+    // Проверка на текущий день после 9 утра
+    const now = new Date();
+    const isToday = date.getDate() === now.getDate() && 
+                    date.getMonth() === now.getMonth() && 
+                    date.getFullYear() === now.getFullYear();
+    
+    const isAfter9AM = now.getHours() >= 9;
+
+    return isWeekend || isHoliday || (isToday && isAfter9AM);
+  };
+
   const handleDateClick = (date: Date) => {
+    if (isDateDisabled(date)) return;
+
     if (singleDate) {
-        setSelectedStartDate(date);
-        setSelectedEndDate(null);
-        setIsOpen(false);
-        return;
+      setSelectedStartDate(date);
+      setSelectedEndDate(null);
+      setIsOpen(false);
+      return;
     }
     
     if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
@@ -114,9 +153,19 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     return days;
   };
 
+  const normalizeDate = (date: Date | null) => {
+    if (!date) return null;
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+  };
+
   const isDateInRange = (date: Date) => {
     if (!selectedStartDate || !selectedEndDate) return false;
-    return date > selectedStartDate && date < selectedEndDate;
+    
+    const currentDateTime = normalizeDate(date);
+    const startDateTime = normalizeDate(selectedStartDate);
+    const endDateTime = normalizeDate(selectedEndDate);
+    
+    return currentDateTime > startDateTime && currentDateTime < endDateTime;
   };
 
   const isDateSelected = (date: Date) => {
@@ -132,13 +181,20 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     
     const classNames = [styles.day];
     
-    if (isDateSelected(date)) {
-      if (selectedStartDate && date.getTime() === selectedStartDate.getTime()) {
-        classNames.push(styles.firstSelected);
-      }
-      if (selectedEndDate && date.getTime() === selectedEndDate.getTime()) {
-        classNames.push(styles.lastSelected);
-      }
+    if (isDateDisabled(date)) {
+      classNames.push(styles.disabled);
+    }
+    
+    const currentDateTime = normalizeDate(date);
+    const startDateTime = normalizeDate(selectedStartDate);
+    const endDateTime = normalizeDate(selectedEndDate);
+    
+    if (startDateTime && currentDateTime === startDateTime) {
+      classNames.push(styles.firstSelected);
+    }
+    
+    if (endDateTime && currentDateTime === endDateTime) {
+      classNames.push(styles.lastSelected);
     }
     
     if (isDateInRange(date)) {

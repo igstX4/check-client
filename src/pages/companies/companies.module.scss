@@ -23,7 +23,9 @@
         border-radius: 10px;
         overflow: hidden;
         min-width: 100%;
-
+        @media screen and (max-width: 600px) {
+            border: 0 !important;
+        }
         .searchWrapper {
             display: flex;
             align-items: center;
@@ -113,7 +115,7 @@
         }
 
         .tableContainer {
-            overflow-x: auto;
+            // overflow-x: auto;
             // position: absolute;
             left: 0;
             width: 100%;
@@ -268,6 +270,7 @@
         // padding: 16px;
 
         .clients_header {
+            display: none;
             margin-bottom: 16px;
 
             h1 {
@@ -290,12 +293,15 @@
             border-right: none;
             box-shadow: none;
             min-width: unset;
+            
 
             .cardsContainer {
                 display: none;
             }
 
             .table {
+                // max-width: 100%;
+                overflow-x: auto;
                 display: table;
             }
         }
@@ -354,3 +360,8 @@
     font-size: 12px;
   }
 }
+
+.tableContainer2 {
+    overflow-x: auto;
+    max-width: 100%;
+ }

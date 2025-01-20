@@ -13,13 +13,16 @@ interface SellerSelectProps {
     onChange: (sellerId: string, sellerInn: string) => void;
     sellers: Seller[];
     error?: string;
+    dontShowElite?: boolean;
+    
 }
 
 const SellerSelect: React.FC<SellerSelectProps> = ({ 
     value, 
     onChange, 
     sellers,
-    error 
+    error,
+    dontShowElite
 }) => {
     const handleSellerChange = (sellerId: string) => {
         const selectedSeller = sellers.find(seller => seller.id === sellerId);
@@ -42,7 +45,7 @@ const SellerSelect: React.FC<SellerSelectProps> = ({
                         ИНН {seller.inn}
                     </span>
                 </div>
-                {seller.type === 'elite' && (
+                {!dontShowElite && seller.type === 'elite' && (
                     <span style={{
                         backgroundColor: '#F5EBFF',
                         color: '#924FE8',

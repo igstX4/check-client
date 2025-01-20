@@ -217,6 +217,15 @@
          &.inRange {
             background: #F4F5F6;
          }
+         
+         &.disabled {
+            color: #DEE0E3;
+            cursor: not-allowed;
+            
+            &:hover {
+               background: none;
+            }
+         }
       }
       
       .blank {

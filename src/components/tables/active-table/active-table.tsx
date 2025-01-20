@@ -31,6 +31,8 @@ interface ActiveTableProps {
   filters?: FilterState;
   hideCompanyColumn?: boolean;
   hideClientColumn?: boolean;
+  onRemoveDateFilter: () => void;
+  onRemoveSellerFilter: () => void;
 }
 
 interface TableData {
@@ -91,7 +93,9 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
   onExport,
   filters: externalFilters,
   hideCompanyColumn = false,
-  hideClientColumn = false
+  hideClientColumn = false,
+  onRemoveDateFilter,
+  onRemoveSellerFilter
 }) => {
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [isMobile, setIsMobile] = useState(false);
@@ -465,34 +469,32 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
               return { from, to };
             })()}
             onRemoveFilter={(type) => {
-              const newFilters = { ...externalFilters };
-              switch (type) {
-                case 'client':
-                  newFilters.users = [];
-                  break;
-                case 'company':
-                  newFilters.companies = [];
-                  break;
-                case 'seller':
-                  newFilters.sellers = [];
-                  break;
-                case 'status':
-                  newFilters.status = '';
-                  newFilters.statuses = [];
-                  break;
-                case 'sum':
-                  newFilters.sum = { from: '', to: '' };
-                  break;
+              if (type === 'seller') {
+                onRemoveSellerFilter();
+              } else {
+                const newFilters = { ...externalFilters };
+                switch (type) {
+                  case 'client':
+                    newFilters.users = [];
+                    break;
+                  case 'company':
+                    newFilters.companies = [];
+                    break;
+                  case 'seller':
+                    newFilters.sellers = [];
+                    break;
+                  case 'status':
+                    newFilters.status = '';
+                    newFilters.statuses = [];
+                    break;
+                  case 'sum':
+                    newFilters.sum = { from: '', to: '' };
+                    break;
+                }
+                onMobileFiltersChange?.(newFilters);
               }
-              onMobileFiltersChange?.(newFilters);
             }}
-            onRemoveDateFilter={() => {
-              const newFilters = {
-                ...externalFilters,
-                date: { start: '', end: '' }
-              };
-              onMobileFiltersChange?.(newFilters);
-            }}
+            onRemoveDateFilter={onRemoveDateFilter}
             hideCompanyFilterDisplay={hideCompanyColumn}
           />
         )}

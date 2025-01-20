@@ -26,15 +26,15 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   onRemoveDateFilter,
   hideCompanyFilterDisplay = false
 }) => {
-  console.log('Applied Filters Props:', {
-    dateFilter,
-    clientFilters,
-    companyFilters,
-    sellerFilters,
-    statusFilters,
-    sumFilter,
-    hideCompanyFilterDisplay
-  });
+  // console.log('Applied Filters Props:', {
+  //   dateFilter,
+  //   clientFilters,
+  //   companyFilters,
+  //   sellerFilters,
+  //   statusFilters,
+  //   sumFilter,
+  //   hideCompanyFilterDisplay
+  // });
 
   const truncateText = (text: string, maxLength: number = 15) => {
     if (text.length <= maxLength) return text;
@@ -46,13 +46,13 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   };
 
   const renderFilterItem = (type: string, values: string[]) => {
-    console.log('Rendering filter item:', type, values);
+    // console.log('Rendering filter item:', type, values);
     if (type === 'company' && hideCompanyFilterDisplay) {
-      console.log('Skipping company filter due to hideCompanyFilterDisplay');
+      // console.log('Skipping company filter due to hideCompanyFilterDisplay');
       return null;
     }
     if (values.length === 0) {
-      console.log('Skipping empty filter:', type);
+      // console.log('Skipping empty filter:', type);
       return null;
     }
 

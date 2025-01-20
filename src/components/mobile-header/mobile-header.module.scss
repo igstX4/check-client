@@ -1,0 +1,33 @@
+.mobileHeader1 {
+  display: none;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  margin-bottom: 7px;
+  height: 44px;
+  border-bottom: 1px solid #DEE0E3;
+  h1 {
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .rightDiv {
+    position: absolute;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+  }
+  h2 {
+    cursor: pointer;
+    color: #924FE8;
+    font-size: 17px;
+    font-weight: 400;
+  }
+}
+@media screen and (max-width: 600px) {
+    .mobileHeader1 {
+        display: flex;
+    }
+}

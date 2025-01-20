@@ -16,6 +16,7 @@ import Pagination from '../../components/ui/pagination/pagination';
 import { useDebounce } from '../../hooks/useDebounce';
 import Loading from '../../components/ui/loading/loading';
 import LoadingSlider from '../../components/ui/loading-slider/loading-slider';
+import MobileHeader from '../../components/mobile-header/mobile-header';
 
 const Companies = () => {
   const navigate = useNavigate();
@@ -114,6 +115,7 @@ const Companies = () => {
 
   return (
     <div className={s.clients}>
+      <MobileHeader title={'Компании'}/>
       <div className={s.clients_header}>
         <h1>Компании</h1>
         {/* <Button
@@ -188,7 +190,7 @@ const Companies = () => {
         {isLoading ? (
           <LoadingSlider />
         ) : (
-          <>
+          <div className={s.tableContainer2}>
             <table className={s.table} data-view-mode={viewMode}>
               <thead>
                 <tr>
@@ -220,7 +222,7 @@ const Companies = () => {
             <div className={s.cardsContainer} data-view-mode={viewMode}>
               {filteredData.map(row => renderCard(row))}
             </div>
-          </>
+          </div>
         )}
       </div>
 

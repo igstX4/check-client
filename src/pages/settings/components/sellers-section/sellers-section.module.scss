@@ -1,12 +1,12 @@
 .sellersSection {
-  padding: 0 16px;
+  // padding: 0 16px;
   .header {
     display: flex;
     width: 100%;
     justify-content: space-between;
     align-items: flex-start;
     margin-top: 40px;
-
+    
     .headerLeft {
       display: flex;
       align-items: center;
@@ -36,4 +36,15 @@
       padding: 0 16px;
     }
   }
+  @media screen and (max-width: 600px) {
+    .header {
+      display: none;
+    }
+    .pagetitile {
+      display: block;
+    }
+  }
 } 
+.pagetitile {
+  display: none;
+}

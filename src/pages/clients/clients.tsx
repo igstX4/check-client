@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { getAllClients, deleteClient } from '../../store/slices/clientSlice';
 import { useNotification } from '../../contexts/NotificationContext/NotificationContext';
 import StatusBadge from '../../components/ui/status-badge/status-badge';
+import MobileHeader from '../../components/mobile-header/mobile-header';
 
 interface Client {
     _id: string;
@@ -195,11 +196,11 @@ const Clients = () => {
         name={currentUser?.name || ''} 
         clientId={currentUser?._id || ''}
       />
+      <MobileHeader title={'Клиенты'} button={{text: 'Регистрация', onClick: () => setIsCreating(true)}}/>
       <div className={s.clients_header}>
-        <div className={s.header_left}>
         <h1>Клиенты</h1>
-        <h2 onClick={() => setIsCreating(true)} className={s.registration}>Регистрация</h2>
-        </div>
+        
+        {/* <h2 onClick={() => setIsCreating(true)} className={s.registration}>Регистрация</h2> */}
         <Button
           variant='purple'
           label='Зарегистрировать нового клиента'

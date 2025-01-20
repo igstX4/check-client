@@ -189,7 +189,7 @@ const ApplicationsSearchBottomSheet: React.FC<ApplicationsSearchBottomSheetProps
                                 placeholder="Поиск"
                                 value={localSearchQuery}
                                 onChange={(e) => handleLocalSearchChange(e.target.value)}
-                                autoFocus
+                                // autoFocus
                             />
                         </div>
                     </div>

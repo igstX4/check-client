@@ -1,0 +1,33 @@
+.clientSuccess {
+  display: flex;
+  padding: 0 10px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  .clientSuccess__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      color: #14151A;
+    }
+  }
+  .buttons {
+    display: flex;
+    gap: 10px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .buttons {
+    width: 100%;
+    flex-direction: column;
+    button {
+      width: 100% !important;
+    }
+  }
+}
+

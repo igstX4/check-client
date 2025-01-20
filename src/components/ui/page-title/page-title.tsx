@@ -33,6 +33,7 @@ interface PageTitleProps {
   onSave?: () => void;
   onCancel?: () => void;
   date?: string;
+  marginTopZero?: boolean;
   clientId?: string;
 }
 
@@ -41,6 +42,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
   title,
   statuses = [],
   name,
+  marginTopZero,
   noRightBtns,
   setStatuses,
   isCompany = false,
@@ -205,7 +207,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
           <button onClick={handleEdit} className={s.editBtn}>Изменить</button>
         )}
       </div>
-      <div className={s.pageTitle}>
+      <div style={{marginTop: marginTopZero ? '0' : ''}} className={s.pageTitle}>
         <IsEditingBar isEditing={editing} />
 
         <div className={s.globalLeft}>

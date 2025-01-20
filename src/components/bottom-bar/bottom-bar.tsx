@@ -12,7 +12,7 @@ const BottomBar = () => {
 
   const menuItems = [
     {
-      path: '/admin/applications',
+      path: '/admin/active-applications',
       icon: <DocumentIcon />,
       label: 'Заявки',
       badge: activeApplicationsCount

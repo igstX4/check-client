@@ -9,6 +9,7 @@ import AppliedFilters from '../../ui/applied-filters/applied-filters';
 import { FilterState } from '../../../types/filter-state';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
+import MobileHeader from '../../mobile-header/mobile-header';
 
 interface CheckData {
   id: string;
@@ -95,22 +96,22 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  console.log(data, 'data')
   const getRowMenuOptions = (item: CheckData) => [
     {
       id: '1',
       label: 'Перейти к заявке',
-      onClick: () => navigate(`/admin/application/${item.application?.id}`),
+      onClick: () => navigate(`/admin/application/${item.application?._id}`),
     },
     {
       id: '2',
       label: 'Перейти к компании',
-      onClick: () => navigate(`/admin/detailed-company/${item.application?.company?.id}`),
+      onClick: () => navigate(`/admin/detailed-company/${item.application?.company?._id}`),
     },
     {
       id: '3',
       label: 'Перейти к клиенту',
-      onClick: () => navigate(`/admin/detailed-client/${item.application?.user?.id}`),
+      onClick: () => navigate(`/admin/detailed-client/${item.application?.user?._id}`),
     }
   ];
 
@@ -118,9 +119,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
     if (!isMobile) return null;
 
     return (
-      <div className={styles.mobileHeader}>
-        <h1>Чеки</h1>
-      </div>
+      <MobileHeader title={'Чеки'} />
     );
   };
 
@@ -249,7 +248,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
               const totalPrice = calculateTotalPrice(item);
               const vat = calculateVAT(totalPrice);
               return (
-                <tr key={item.id}>
+                <tr onClick={() => navigate(`/admin/application/${item.application?._id}`)} key={item.id}>
                   <td>{index + 1}</td>
                   <td>
                     <div className={styles.dateContainer}>
@@ -286,7 +285,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
                   <td className={styles.price}>{formatPrice(item.pricePerUnit)}</td>
                   <td className={styles.price}>{formatPrice(totalPrice)}</td>
                   <td className={styles.vat}>{formatPrice(vat)}</td>
-                  <td>
+                  <td onClick={(e) => e.stopPropagation()}>
                     <RowMenu options={getRowMenuOptions(item)} />
                   </td>
                 </tr>

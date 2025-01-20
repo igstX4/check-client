@@ -7,6 +7,7 @@
    overflow-x: auto;
 }
 
+
 .search {
    width: 100%;
    padding: 10px;
@@ -264,13 +265,14 @@
 
 .topElement {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 8px;
     flex-wrap: wrap;
     .left {
       display: flex;
-      gap: 3px;
+      width: 90%;
+      gap: 5px;
     }
 }
 
@@ -455,7 +457,7 @@
 }
 .topElement {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
 }
 .statuses {

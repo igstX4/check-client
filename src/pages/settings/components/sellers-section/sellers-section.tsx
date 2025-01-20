@@ -11,6 +11,8 @@ import DeleteUserModal from '../../../../components/modals/delete-user-modal/del
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { getAllSellers, createSeller, updateSeller, deleteSeller } from '../../../../store/slices/sellerSlice';
 import { useNotification } from '../../../../contexts/NotificationContext/NotificationContext';
+import MobileHeader from '../../../../components/mobile-header/mobile-header';
+import PageTitle from '../../../../components/ui/page-title/page-title';
 
 const SellersSection = () => {
   const dispatch = useAppDispatch();
@@ -159,6 +161,7 @@ const SellersSection = () => {
             </div>
           </div>
         </div>
+        
         <Button 
           label='Добавить продавца' 
           icon={<Plus />} 
@@ -170,7 +173,16 @@ const SellersSection = () => {
           style={{width: "183px", height: "32px"}}
         />
       </div>
-
+      <div className={s.pagetitile}>
+      <PageTitle 
+        responsive_name='Продавцы' 
+        marginTopZero={true}
+        responsive_btns={[{text: 'Добавить', onClick: () => {
+          setIsAddSellerOpen(true);
+          setIsEditing(false);
+        }}]}
+      />
+      </div>
       <SellersTable 
         data={mappedSellers}
         viewMode={viewMode}

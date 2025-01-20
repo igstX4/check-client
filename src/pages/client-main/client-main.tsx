@@ -217,7 +217,8 @@ const ClientMain = () => {
             setActiveCompanyId(null);
             setHasChecks(false);
             
-            addNotification('Заявка успешно создана', 'success');
+            // addNotification('Заявка успешно создана', 'success');
+            navigate('/client/success');
         } catch (error) {
             console.log(error);
             addNotification(
@@ -297,33 +298,25 @@ const ClientMain = () => {
                     <div className={s.blocks}>
                         <div className={s.block}>
                             <p className={s.type}>ПОКУПАТЕЛЬ</p>
-                            <div className={s.savedCompanies}>
-                                <p className={s.heading}>Сохраненные компании</p>
-                                <div className={s.list} onMouseDown={handleMouseDown}>
-                                    {savedCompaniesLoading ? (
-                                        <div className={s.loading}>Загрузка...</div>
-                                    ) : savedCompanies.length > 0 ? (
-                                        savedCompanies.map((company) => (
-                                            <div
-                                                key={company.id}
-                                                className={`${s.company} ${activeCompanyId === company.id ? s.active : ''}`}
-                                                onClick={() => handleSavedCompanySelect(company)}
-                                            >
+                            {savedCompanies.length > 0 ? (
+                                <>
+                                <div className={s.savedCompanies}>
+                                    <p className={s.heading}>Сохраненные компании</p>
+                                    <div className={s.list} onMouseDown={handleMouseDown}>
+                                        {savedCompanies.map((company) => (
+                                            <div onClick={() => handleSavedCompanySelect(company)} key={company.id} className={`${s.company} ${activeCompanyId === company.id ? s.active : ''}`}>
                                                 <h6>{company.name}</h6>
                                                 <p>ИНН {company.inn}</p>
                                             </div>
-                                        ))
-                                    ) : (
-                                        <div className={s.noCompanies}>
-                                            Нет сохраненных компаний
-                                        </div>
-                                    )}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={s.orDiv}>
+                                <div className={s.orDiv}>
                                 <div className={s.line}></div>
                                 <div className={s.orText}>или</div>
-                            </div>
+                            </div></>
+                            ) : null}
+                            
                             <div className={s.inputs}>
                                 <Input 
                                     value={companyName} 
@@ -356,11 +349,7 @@ const ClientMain = () => {
                                             }
                                         </p>
                                     </>
-                                ) : (
-                                    <p className={s.noPermission}>
-                                        У вас нет прав на сохранение компаний
-                                    </p>
-                                )}
+                                ) : null}
                             </div>
                         </div>
                         <div className={s.block}>
@@ -370,6 +359,7 @@ const ClientMain = () => {
                                 onChange={handleSellerChange}
                                 sellers={sellers}
                                 error={sellerError}
+                                dontShowElite={true}
                             />
                             <Input
                                 label="ИНН продавца"

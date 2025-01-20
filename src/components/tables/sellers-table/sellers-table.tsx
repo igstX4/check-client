@@ -7,6 +7,7 @@ import Select from '../../ui/select/select';
 import AddSellerModal from '../../modals/add-seller-modal/add-seller-modal';
 import { mockData } from '../../../pages/settings/settings';
 import Loader from '../../ui/loader/loader';
+import { useNavigate } from 'react-router-dom';
 
 interface SellerData {
   id: string;
@@ -49,6 +50,7 @@ const SellersTable: React.FC<SellersTableProps> = ({
 }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const navigate = useNavigate();
 
   const typeOptions = [
     { id: 'elite', label: 'Элитная', checked: selectedTypes.includes('elite') },
@@ -83,7 +85,11 @@ const SellersTable: React.FC<SellersTableProps> = ({
     {
       id: 'applications',
       label: 'Заявки с компанией',
-      onClick: () => console.log('Заявки с компанией', row.id),
+      onClick: () => {
+        const searchParams = new URLSearchParams();
+        searchParams.set('sellers', row.id);
+        navigate(`/admin/applications?${searchParams.toString()}`);
+      },
       color: '#14151A'
     },
     {

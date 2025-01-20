@@ -51,13 +51,20 @@ const AddClientModal: FC<Props> = ({ isOpened, setOpen }) => {
         setOpen(false);
     };
 
-    const copyToClipboard = () => {
-        const link = `${window.location.origin}/client/login/${clientKey}`;
-        navigator.clipboard.writeText(link)
-            .then(() => addNotification('Ссылка скопирована', 'success'))
-            .catch(() => addNotification('Ошибка при копировании', 'error'));
-    };
-
+    const copyToClipboard = (text: string) => {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          addNotification('Ссылка скопирована', 'success');
+        } catch {
+          addNotification('Ошибка при копировании', 'error');
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      };
     return (
         <Modal 
             title={step === 1 ? 'Регистрация нового клиента' : `Клиент ${name} зарегистрирован!`} 
@@ -98,7 +105,7 @@ const AddClientModal: FC<Props> = ({ isOpened, setOpen }) => {
                                     <p>{clientKey ? `${window.location.origin}/client/login/${clientKey}` : 'Ссылка будет доступна позже'}</p>
                                 </div>
                                 {clientKey && (
-                                    <div className={s.copy} onClick={copyToClipboard}>
+                                    <div className={s.copy} onClick={() => copyToClipboard(`${window.location.origin}/client/login/${clientKey}`)}>
                                         Скопировать
                                     </div>
                                 )}
