@@ -15,7 +15,7 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         scope: '/',
-        start_url: '/',
+        start_url: '/admin/login',
         icons: [
           {
             src: '/icon-512x512.png',
