@@ -1,4 +1,3 @@
-
 import React, { FC, useState, useEffect, useRef } from 'react'
 import { Message, AttachFile, SendSvg, FileXlss, Trash, Close } from '../svgs/svgs'
 import s from './comments.module.scss'
@@ -14,6 +13,7 @@ import {
 } from '../../store/slices/commentSlice'
 import { useNotification } from '../../contexts/NotificationContext/NotificationContext'
 import { formatDate } from '../../utils/date'
+import { API_URL, SERVER_URL } from '../../api/axios'
 
 interface Props {
     editing: boolean;
@@ -36,6 +36,8 @@ interface CommentProps {
 }
 
 const CommentMessage: FC<CommentProps> = ({ id, author, createdAt, text, file, onDelete }) => {
+    const { addNotification } = useNotification();
+
     const getFileIcon = (mimetype: string) => {
         switch (mimetype) {
             case 'application/pdf':
@@ -58,7 +60,13 @@ const CommentMessage: FC<CommentProps> = ({ id, author, createdAt, text, file, o
         if (!file?.path) return;
         
         try {
-            const response = await fetch(file.path);
+            const fullUrl = `${SERVER_URL}${file.path}`;
+            const response = await fetch(fullUrl);
+            
+            if (!response.ok) {
+                throw new Error('Ошибка при скачивании файла');
+            }
+            
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -70,6 +78,7 @@ const CommentMessage: FC<CommentProps> = ({ id, author, createdAt, text, file, o
             document.body.removeChild(a);
         } catch (error) {
             console.error('Error downloading file:', error);
+            addNotification('Ошибка при скачивании файла', 'error');
         }
     };
 
