@@ -23,11 +23,11 @@ interface Props {
   onSubmit: (data: CheckData) => void; // Колбэк для сохранения/добавления
 }
 
-const AddCheckModal: FC<Props> = ({ 
-  isOpened, 
-  setOpen, 
+const AddCheckModal: FC<Props> = ({
+  isOpened,
+  setOpen,
   editData,
-  onSubmit 
+  onSubmit
 }) => {
   const [date, setDate] = useState('');
   const [product, setProduct] = useState('');
@@ -36,22 +36,14 @@ const AddCheckModal: FC<Props> = ({
   const [priceWithVat, setPriceWithVat] = useState('');
   const [totalWithVat, setTotalWithVat] = useState('');
   const [vat, setVat] = useState('');
-
+  // console.log(editData, 'editData')
   // Форматирование числа для отображения
   const formatNumber = (num: number): string => {
-    console.log(new Intl.NumberFormat('ru-RU', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(num))
     return new Intl.NumberFormat('ru-RU', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
+      useGrouping: true // Это добавит разделители для тысяч
     }).format(num);
-  };
-
-  // Очистка строки от форматирования для вычислений
-  const cleanNumberString = (str: string): number => {
-    return Number(str.replace(/[^\d.-]/g, ''));
   };
 
   // Заполняем форму данными при редактировании
@@ -61,9 +53,10 @@ const AddCheckModal: FC<Props> = ({
       setProduct(editData.product);
       setQuantity(editData.quantity);
       setUnit(editData.unit);
-      setPriceWithVat(editData.priceWithVAT.replace(/[^\d.-]/g, '')); // Очищаем от форматирования
-      setTotalWithVat(editData.totalWithVAT);
-      setVat(editData.vat20);
+      // Убираем только символ рубля и пробелы, сохраняем запятую
+      setPriceWithVat(editData.priceWithVAT.replace(/[₽\s]/g, '')); 
+      setTotalWithVat(editData.totalWithVAT.replace(/[₽\s]/g, ''));
+      setVat(editData.vat20.replace(/[₽\s]/g, ''));
     }
   }, [editData]);
 
@@ -80,10 +73,18 @@ const AddCheckModal: FC<Props> = ({
     }
   }, [isOpened]);
 
+  // Очистка строки от форматирования для вычислений
+  const cleanNumberString = (str: string): number => {
+    // Убираем все пробелы, символ рубля и преобразуем запятую в точку
+    const cleaned = str.replace(/[₽\s]/g, '').replace(',', '.');
+    // console.log('cleanNumberString input:', str, 'cleaned:', cleaned, 'parsed:', parseFloat(cleaned));
+    return parseFloat(cleaned) || 0;
+  };
+
   // Расчет общей суммы с НДС
   const calculateTotalWithVat = (quantity: string, priceWithVat: string) => {
-    const qty = parseFloat(quantity.replace(/[^\d.-]/g, '') || '0');
-    const price = parseFloat(priceWithVat.replace(/[^\d.-]/g, '') || '0');
+    const qty = cleanNumberString(quantity);
+    const price = cleanNumberString(priceWithVat);
     return qty * price;
   };
 
@@ -93,15 +94,26 @@ const AddCheckModal: FC<Props> = ({
     return totalWithVat * (20 / 120);
   };
 
-  // В useEffect для обновления значений
+  // В useEffect для обновления значений при вводе
   useEffect(() => {
     if (quantity && priceWithVat) {
+      // console.log('Input values:', { quantity, priceWithVat });
+      
       const total = calculateTotalWithVat(quantity, priceWithVat);
-      setTotalWithVat(formatNumber(total));
-      setVat(formatNumber(calculateVat(total)));
+      const vatAmount = total * 0.2;
+
+      // console.log('Calculated values:', { total, vatAmount });
+      
+      const formattedTotal = formatNumber(total);
+      const formattedVat = formatNumber(vatAmount);
+      
+      // console.log('Formatted values:', { formattedTotal, formattedVat });
+
+      setTotalWithVat(formattedTotal);
+      setVat(formattedVat);
     } else {
-      setTotalWithVat('0.00');
-      setVat('0.00');
+      setTotalWithVat('0,00');
+      setVat('0,00');
     }
   }, [quantity, priceWithVat]);
 
@@ -109,50 +121,108 @@ const AddCheckModal: FC<Props> = ({
     setDate(startDate);
   };
 
+  // Обработчики изменения полей
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Разрешаем цифры, одну запятую и одну точку
+    const value = e.target.value.replace(/[^\d.,]/g, '');
+    
+    // Заменяем точку на запятую
+    const normalizedValue = value.replace('.', ',');
+    
+    // Проверяем, что запятая только одна
+    const parts = normalizedValue.split(',');
+    if (parts.length > 2) {
+      return;
+    }
+    
+    // Ограничиваем количество цифр после запятой
+    if (parts[1] && parts[1].length > 2) {
+      return;
+    }
+    
+    setQuantity(normalizedValue);
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Разрешаем цифры, одну запятую и одну точку
+    const value = e.target.value.replace(/[^\d.,]/g, '');
+    
+    // Заменяем точку на запятую
+    const normalizedValue = value.replace('.', ',');
+    
+    // Проверяем, что запятая только одна
+    const parts = normalizedValue.split(',');
+    if (parts.length > 2) {
+      return;
+    }
+    
+    // Ограничиваем количество цифр после запятой
+    if (parts[1] && parts[1].length > 2) {
+      return;
+    }
+    
+    setPriceWithVat(normalizedValue);
+  };
+
   const handleSubmit = () => {
     if (!date || !product || !quantity || !unit || !priceWithVat) {
-        addNotification('Заполните все поля', 'error');
-        return;
+      addNotification('Заполните все поля', 'error');
+      return;
     }
 
-    const quantityNum = parseFloat(quantity.replace(/[^\d.-]/g, ''));
-    const priceNum = parseFloat(priceWithVat.replace(/[^\d.-]/g, '').replace(',', '.'));
+    // console.log('Submit values:', { quantity, priceWithVat });
+
+    const quantityNum = cleanNumberString(quantity);
+    const priceNum = cleanNumberString(priceWithVat);
+    
+    // console.log('Parsed numbers:', { quantityNum, priceNum });
+    
     const totalNum = quantityNum * priceNum;
-    const vatNum = totalNum * (20 / 120); // НДС 20% от суммы с НДС
+    const vatNum = totalNum * 0.2;
+    
+    // console.log('Calculated totals:', { totalNum, vatNum });
+
+    const formattedPrice = formatNumber(priceNum);
+    const formattedTotal = formatNumber(totalNum);
+    const formattedVat = formatNumber(vatNum);
+    
+    // console.log('Formatted values:', { formattedPrice, formattedTotal, formattedVat });
 
     const checkData = {
-        date,
-        product,
-        unit,
-        quantity: quantity,
-        priceWithVAT: priceNum.toFixed(2),
-        totalWithVAT: totalNum.toFixed(2),
-        vat20: vatNum.toFixed(2)
+      date,
+      product,
+      unit,
+      quantity: quantity,
+      priceWithVAT: `${formattedPrice} ₽`,
+      totalWithVAT: `${formattedTotal} ₽`,
+      vat20: `${formattedVat} ₽`
     };
 
+    // console.log('Final check data:', checkData);
+
     onSubmit(checkData);
-    handleClose();
+    setOpen(false);
   };
 
   return (
-    <Modal 
+    <Modal
       title={editData ? "Редактирование чека" : "Новый чек"}
-      setOpen={setOpen} 
+      setOpen={setOpen}
       isOpened={isOpened}
       maxWidth
     >
       <div className={s.content}>
-        <DateSelector 
+        <DateSelector
           onDateChange={handleDateChange}
           fullWidth={true}
           closeOnClickOutside={true}
-          singleDate 
+          singleDate
           inputStyle
           label="Дата"
           value={date}
         />
-        
-        <Input 
+
+        <Input
           label="Товар"
           placeholder="Введите название товара"
           value={product}
@@ -160,13 +230,13 @@ const AddCheckModal: FC<Props> = ({
         />
 
         <div className={s.row}>
-          <Input 
+          <Input
             label="Количество"
             placeholder="0"
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={handleQuantityChange}
           />
-          <Input 
+          <Input
             label="Единица измерения"
             placeholder="шт"
             value={unit}
@@ -174,12 +244,12 @@ const AddCheckModal: FC<Props> = ({
           />
         </div>
 
-        <Input 
+        <Input
           label="Цена за единицу с НДС"
-          placeholder="0.00 ₽"
+          placeholder="0,00 ₽"
           noMargin={true}
           value={priceWithVat}
-          onChange={(e) => setPriceWithVat(e.target.value)}
+          onChange={handlePriceChange}
         />
 
         <div className={s.separator}>
@@ -187,12 +257,12 @@ const AddCheckModal: FC<Props> = ({
         </div>
 
         <div className={s.row}>
-          <Input 
+          <Input
             label="Стоимость с НДС"
             value={`${totalWithVat} ₽`}
             disabled
           />
-          <Input 
+          <Input
             label="НДС 20%"
             value={`${vat} ₽`}
             disabled
@@ -201,19 +271,19 @@ const AddCheckModal: FC<Props> = ({
       </div>
 
       <div className={s.actions}>
-        <Button 
-          label="Отмена" 
+        <Button
+          label="Отмена"
           variant="white"
           onClick={() => setOpen(false)}
-          style={{width: "100%", minHeight: "40px"}}
-          styleLabel={{fontSize: "14px", fontWeight: "500"}}
+          style={{ width: "100%", minHeight: "40px" }}
+          styleLabel={{ fontSize: "14px", fontWeight: "500" }}
         />
-        <Button 
+        <Button
           label={editData ? "Сохранить изменения" : "Добавить чек"}
           variant="purple"
           onClick={handleSubmit}
-          style={{width: "100%", minHeight: "40px"}}
-          styleLabel={{fontSize: "14px", fontWeight: "500"}}
+          style={{ width: "100%", minHeight: "40px" }}
+          styleLabel={{ fontSize: "14px", fontWeight: "500" }}
         />
       </div>
     </Modal>

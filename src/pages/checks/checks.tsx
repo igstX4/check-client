@@ -12,6 +12,7 @@ import { AppDispatch, RootState } from '../../store/store';
 import { fetchChecks } from '../../store/slices/checkSlice';
 import Pagination from '../../components/ui/pagination/pagination';
 import ExportChecksModal from '../../components/modals/export-checks-modal/export-checks-modal';
+import MobileHeader from '../../components/mobile-header/mobile-header';
 
 interface CheckData {
   id: string;
@@ -153,7 +154,13 @@ const Checks = () => {
   const handleExport = () => {
     setIsExportModalOpen(true);
   };
+  const renderMobileHeader = () => {
+    if (!isMobile) return null;
 
+    return (
+      <MobileHeader title={'Чеки'} />
+    );
+  };
   const renderCard = (check: CheckData, index: number) => (
     <div className={styles.card} key={check.id}>
       <div className={styles.cardBody}>
@@ -195,6 +202,7 @@ const Checks = () => {
 
   return (
     <div className={styles.pageContainer}>
+      {renderMobileHeader()}
       <div className={styles.header}>
         <h2>Чеки</h2>
         <Button
@@ -214,6 +222,13 @@ const Checks = () => {
         onFiltersChange={handleMobileFilterChange}
         hideClientFilter={true}
         hideStatusFilter={true}
+        onRemoveDateFilter={() => {
+          const newFilters = {
+            ...filters,
+            date: { start: '', end: '' }
+          };
+          handleMobileFilterChange(newFilters);
+        }}
         // className={isMobile ? 'mobileView' : ''}
       />
 

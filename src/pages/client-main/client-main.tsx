@@ -66,22 +66,13 @@ const ClientMain = () => {
     }, [dispatch]);
 
     const handleCheckSubmit = (checkData: CheckData) => {
-        // Форматируем числа в нужный формат
+        // Не форматируем числа повторно, так как они уже отформатированы в модальном окне
         const formattedCheck = {
-            ...checkData,
-            priceWithVAT: new Intl.NumberFormat('ru-RU', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(parseFloat(checkData.priceWithVAT)),
-            totalWithVAT: new Intl.NumberFormat('ru-RU', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(parseFloat(checkData.totalWithVAT)),
-            vat20: new Intl.NumberFormat('ru-RU', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(parseFloat(checkData.vat20))
+            ...checkData
         };
+
+        console.log('Original check data:', checkData);
+        console.log('Formatted check:', formattedCheck);
 
         if (editingCheck) {
             setChecks(prevChecks => 
@@ -184,9 +175,11 @@ const ClientMain = () => {
             };
 
             const parsePrice = (priceStr: string) => {
+                
                 if (!priceStr) return 0;
                 // Убираем все пробелы и заменяем запятую на точку
                 const cleanPrice = priceStr.replace(/\s/g, '').replace(',', '.');
+                console.log(priceStr, cleanPrice, 11)
                 // Возвращаем число без умножения на 100, так как сервер это сделает сам
                 return parseFloat(cleanPrice);
             };

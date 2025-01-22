@@ -39,7 +39,7 @@ const ClientChecksTable: React.FC<ClientChecksTableProps> = ({
 }) => {
     const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
     const [isMobile, setIsMobile] = useState(false);
-
+    // console.log(data, 'data')
     useEffect(() => {
         const handleResize = () => {
             const mobile = window.innerWidth <= 600;
@@ -55,98 +55,126 @@ const ClientChecksTable: React.FC<ClientChecksTableProps> = ({
         onViewModeChange?.(viewMode);
     }, [viewMode, onViewModeChange]);
 
-    const renderCard = (row: CheckRow, index: number) => (
-        <div className={styles.card} key={row.id}>
-            <div className={styles.cardHeader}>
-                <div className={styles.cardHeaderLeft}>
-                    <span className={styles.cardLabel}>Чек №</span>
-                    <span className={styles.cardValue}>{index + 1}</span>
+    const renderCard = (row: CheckRow, index: number) => {
+        const rowValues = calculateRowValues(row);
+        return (
+            <div className={styles.card} key={row.id}>
+                <div className={styles.cardHeader}>
+                    <div className={styles.cardHeaderLeft}>
+                        <span className={styles.cardLabel}>Чек №</span>
+                        <span className={styles.cardValue}>{index + 1}</span>
+                    </div>
+                    <div className={styles.cardHeaderRight}>
+                        <span className={styles.cardLabel}>Дата:</span>
+                        <span className={styles.cardValue}>{row.date}</span>
+                    </div>
                 </div>
-                <div className={styles.cardHeaderRight}>
-                    <span className={styles.cardLabel}>Дата:</span>
-                    <span className={styles.cardValue}>{row.date}</span>
-                </div>
-            </div>
-            <div className={styles.cardBody}>
-                <div className={styles.SellerBuyer}>
-                    <div className={styles.cardSection}>
-                        <div className={styles.cardRow}>
-                            <span className={styles.cardLabel}>Товар:</span>
-                            <span className={styles.cardValue}>{row.product}</span>
-                        </div>
-                        <div className={styles.cardRow}>
-                            <span className={styles.cardLabel}>Ед.изм:</span>
-                            <span className={styles.cardValue}>{row.unit}</span>
-                        </div>
-                        <div className={styles.cardRow}>
-                            <span className={styles.cardLabel}>Кол-во:</span>
-                            <span className={styles.cardValue}>{row.quantity}</span>
-                        </div>
-                        <div className={styles.cardRow}>
-                            <span className={styles.cardLabel}>Цена за ед. с НДС:</span>
-                            <span className={styles.cardValue}>{row.priceWithVAT}</span>
-                        </div>
-                        <div className={styles.cardRow}>
-                            <span className={styles.cardLabel}>Стоимость с НДС:</span>
-                            <span className={styles.cardValue}>{row.totalWithVAT}</span>
-                        </div>
-                        <div className={styles.cardRow}>
-                            <span className={styles.cardLabel}>НДС 20%:</span>
-                            <span className={styles.cardValue}>{row.vat20}</span>
+                <div className={styles.cardBody}>
+                    <div className={styles.SellerBuyer}>
+                        <div className={styles.cardSection}>
+                            <div className={styles.cardRow}>
+                                <span className={styles.cardLabel}>Товар:</span>
+                                <span className={styles.cardValue}>{row.product}</span>
+                            </div>
+                            <div className={styles.cardRow}>
+                                <span className={styles.cardLabel}>Ед.изм:</span>
+                                <span className={styles.cardValue}>{row.unit}</span>
+                            </div>
+                            <div className={styles.cardRow}>
+                                <span className={styles.cardLabel}>Кол-во:</span>
+                                <span className={styles.cardValue}>{row.quantity}</span>
+                            </div>
+                            <div className={styles.cardRow}>
+                                <span className={styles.cardLabel}>Цена за ед. с НДС:</span>
+                                <span className={styles.cardValue}>{row.priceWithVAT}</span>
+                            </div>
+                            <div className={styles.cardRow}>
+                                <span className={styles.cardLabel}>Стоимость с НДС:</span>
+                                <span className={styles.cardValue}>{`${rowValues.total} ₽`}</span>
+                            </div>
+                            <div className={styles.cardRow}>
+                                <span className={styles.cardLabel}>НДС 20%:</span>
+                                <span className={styles.cardValue}>{`${rowValues.vat} ₽`}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {(onEdit || onDelete) && (
+                    <div className={styles.cardActions}>
+                        {onEdit && (
+                            <button onClick={() => onEdit(row.id)} className={styles.editButton}>
+                                <EditIcon />
+                            </button>
+                        )}
+                        {onDelete && (
+                            <button onClick={() => onDelete(row.id)} className={styles.deleteButton}>
+                                <Cross />
+                            </button>
+                        )}
+                    </div>
+                )}
             </div>
-            {(onEdit || onDelete) && (
-                <div className={styles.cardActions}>
-                    {onEdit && (
-                        <button onClick={() => onEdit(row.id)} className={styles.editButton}>
-                            <EditIcon />
-                        </button>
-                    )}
-                    {onDelete && (
-                        <button onClick={() => onDelete(row.id)} className={styles.deleteButton}>
-                            <Cross />
-                        </button>
-                    )}
-                </div>
-            )}
-        </div>
-    );
+        );
+    };
 
     const calculateTotals = () => {
         return data.reduce((acc, row) => {
             const cleanNumber = (str: string) => {
-                const cleanStr = str.replace(/\s/g, '').replace(',', '.');
-                return parseFloat(cleanStr);
+                return parseFloat(str.replace(/[₽\s]/g, '').replace(',', '.')) || 0;
             };
 
-            const total = cleanNumber(row.totalWithVAT);
-            const vat = cleanNumber(row.vat20);
+            // Получаем базовые значения
+            const quantity = cleanNumber(row.quantity);
+            const pricePerUnit = cleanNumber(row.priceWithVAT);
+            
+            // Рассчитываем итоговые значения
+            const total = quantity * pricePerUnit;
+            const vat = total * 0.2; // 20% от суммы
 
+            // console.log({
+            //     quantity,
+            //     pricePerUnit,
+            //     calculatedTotal: total,
+            //     calculatedVat: vat,
+            //     rowTotal: row.totalWithVAT,
+            //     rowVat: row.vat20
+            // });
+
+            // Используем рассчитанные значения для итогов
             return {
-                total: acc.total + (isNaN(total) ? 0 : total),
-                vat: acc.vat + (isNaN(vat) ? 0 : vat)
+                total: acc.total + total,
+                vat: acc.vat + vat
             };
         }, { total: 0, vat: 0 });
     };
 
     const formatNumber = (num: number): string => {
-        if (Number.isInteger(num)) {
-            return new Intl.NumberFormat('ru-RU').format(num);
-        }
-        
-        const parts = num.toString().split('.');
-        const decimals = parts[1] ? parts[1].length : 0;
-        
         return new Intl.NumberFormat('ru-RU', {
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true
         }).format(num);
     };
 
     const totals = calculateTotals();
     const hasCardsForMobile = isMobile && viewMode === 'cards' && data.length > 0;
+
+    // Функция для расчета значений строки
+    const calculateRowValues = (row: CheckRow) => {
+        const cleanNumber = (str: string) => {
+            return parseFloat(str.replace(/[₽\s]/g, '').replace(',', '.')) || 0;
+        };
+
+        const quantity = cleanNumber(row.quantity);
+        const pricePerUnit = cleanNumber(row.priceWithVAT);
+        const total = quantity * pricePerUnit;
+        const vat = total * 0.2;
+
+        return {
+            total: formatNumber(total),
+            vat: formatNumber(vat)
+        };
+    };
 
     return (
         <div className={styles.wrapper}>
@@ -204,37 +232,40 @@ const ClientChecksTable: React.FC<ClientChecksTableProps> = ({
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((row, index) => (
-                                <tr key={row.id}>
-                                    <td>№{index + 1}</td>
-                                    <td>
-                                        <div className={styles.dateContainer}>
-                                            <Calendar />
-                                            <span>{row.date}</span>
-                                        </div>
-                                    </td>
-                                    <td>{row.product}</td>
-                                    <td>{row.unit}</td>
-                                    <td>{row.quantity}</td>
-                                    <td>{row.priceWithVAT}</td>
-                                    <td className={styles.vat}>{row.totalWithVAT}</td>
-                                    <td className={styles.vat}>{row.vat20}</td>
-                                    {(onDelete || onEdit) && (
-                                        <td className={styles.actions}>
-                                            {onEdit && (
-                                                <button onClick={() => onEdit(row.id)} className={styles.editButton}>
-                                                    <EditIcon />
-                                                </button>
-                                            )}
-                                            {onDelete && (
-                                                <button onClick={() => onDelete(row.id)} className={styles.deleteButton}>
-                                                    <Cross />
-                                                </button>
-                                            )}
+                            {data.map((row, index) => {
+                                const rowValues = calculateRowValues(row);
+                                return (
+                                    <tr key={row.id}>
+                                        <td>№{index + 1}</td>
+                                        <td>
+                                            <div className={styles.dateContainer}>
+                                                <Calendar />
+                                                <span>{row.date}</span>
+                                            </div>
                                         </td>
-                                    )}
-                                </tr>
-                            ))}
+                                        <td>{row.product}</td>
+                                        <td>{row.unit}</td>
+                                        <td>{row.quantity}</td>
+                                        <td>{row.priceWithVAT}</td>
+                                        <td className={styles.vat}>{`${rowValues.total} ₽`}</td>
+                                        <td className={styles.vat}>{`${rowValues.vat} ₽`}</td>
+                                        {(onDelete || onEdit) && (
+                                            <td className={styles.actions}>
+                                                {onEdit && (
+                                                    <button onClick={() => onEdit(row.id)} className={styles.editButton}>
+                                                        <EditIcon />
+                                                    </button>
+                                                )}
+                                                {onDelete && (
+                                                    <button onClick={() => onDelete(row.id)} className={styles.deleteButton}>
+                                                        <Cross />
+                                                    </button>
+                                                )}
+                                            </td>
+                                        )}
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                         <tfoot>
                             <tr className={styles.totalRow}>

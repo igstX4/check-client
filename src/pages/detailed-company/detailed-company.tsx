@@ -507,12 +507,16 @@ const DetailedCompany = () => {
         handleUpdate={handleUpdateCompanyName}
         isCompany={true}
       />
+      
       <PageTitle 
+        hideBtns={true}
         title={companyDetails.name}
         isUser={true} 
+        responsive_name={'Профиль компании'}
+        responsive_btns={false}
         isCompany={true}
         userDeskr={`ИНН ${companyDetails.inn}`} 
-        setOpen={() => setIsOpen(true)}
+        // setOpen={() => setIsOpen(true)}
       />
       
       <h1 className={s.title}>Основная информация</h1>

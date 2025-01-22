@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 
 interface PageTitleProps {
   title: string;
+  hideBtns?: boolean;
   isCompany?: boolean;
   statuses?: ApplicationStatus[];
   setStatuses?: (statuses: ApplicationStatus[]) => void;
@@ -33,6 +34,7 @@ interface PageTitleProps {
   onSave?: () => void;
   onCancel?: () => void;
   date?: string;
+  responsive_name?: string;
   marginTopZero?: boolean;
   clientId?: string;
 }
@@ -44,6 +46,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
   name,
   marginTopZero,
   noRightBtns,
+  hideBtns,
   setStatuses,
   isCompany = false,
   isUser = false,
@@ -53,7 +56,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
   userDeskr,
   setEditing,
   responsive_name,
-  responsive_btns,
+  responsive_btns = false,
   setOpen,
   onSave,
   onCancel
@@ -204,7 +207,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
         {responsive_btns ? responsive_btns.map((btn) => <button className={s.editBtn} onClick={btn.onClick}>{btn.text}</button>) : editing ? (
           <button onClick={handleSave} className={s.editBtn}>Сохранить</button>
         ) : (
-          <button onClick={handleEdit} className={s.editBtn}>Изменить</button>
+          !hideBtns ? <button onClick={handleEdit} className={s.editBtn}>Изменить</button> : <div style={{width: '60px'}}></div>
         )}
       </div>
       <div style={{marginTop: marginTopZero ? '0' : ''}} className={s.pageTitle}>

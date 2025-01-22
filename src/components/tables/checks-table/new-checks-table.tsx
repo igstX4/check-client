@@ -302,7 +302,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
 
   return (
     <>
-      {renderMobileHeader()}
+      {/* {renderMobileHeader()} */}
       {isMobile && (
         <div className={styles.mobileControls}>
           <div className={styles.leftControls}>

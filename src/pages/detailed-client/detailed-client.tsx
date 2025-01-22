@@ -263,6 +263,7 @@ const DetailedClient = () => {
         title={userInfo.user.name} 
         isUser={true} 
         userDeskr='Профиль клиента' 
+        responsive_name={'Профиль клиента'}
         setOpen={() => setIsOpen(true)}
       />
       <h1 className={s.title}>Основная информация</h1>

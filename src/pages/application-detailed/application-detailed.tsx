@@ -282,6 +282,7 @@ const ApplicationDetailed: React.FC = () => {
         editing={editing}
         setEditing={setEditing}
         onSave={handleSaveChanges}
+        responsive_name={`Заявка #${currentApplication?.id?.slice(0, 7) || ''}`}
         onCancel={handleCancelEditing}
         clientId={currentApplication?.user?.id}
         date={currentApplication?.createdAt}
