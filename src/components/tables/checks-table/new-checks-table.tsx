@@ -111,7 +111,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
     {
       id: '3',
       label: 'Перейти к клиенту',
-      onClick: () => navigate(`/admin/detailed-client/${item.application?.user?._id}`),
+      onClick: () => navigate(`/admin/detailed-client/${item.application?.user}`),
     }
   ];
 

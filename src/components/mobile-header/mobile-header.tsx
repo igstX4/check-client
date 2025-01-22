@@ -10,12 +10,15 @@ interface MobileHeaderProps {
 }
 const MobileHeader = ({title, button}: MobileHeaderProps) => {
   return (
+    <>
+    <div className={styles.fake}></div>
     <div className={styles.mobileHeader1}>
         <h1>{title}</h1>
       <div onClick={button?.onClick} className={styles.rightDiv}>
         <h2>{button?.text}</h2>
       </div>
     </div>
+    </>
   )
 }
 

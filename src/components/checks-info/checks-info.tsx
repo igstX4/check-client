@@ -43,7 +43,7 @@ const ChecksInfo: React.FC<ChecksInfoProps> = ({
       </div>
 
       {/* Мобильная версия */}
-      <div className={s.checkInfoListMobile}>
+      {isApplicationMode && <div className={s.checkInfoListMobile}>
         <div className={s.mobileItem}>
           <div className={s.cell}>
             <div className={s.label}>Даты</div>
@@ -68,7 +68,7 @@ const ChecksInfo: React.FC<ChecksInfoProps> = ({
             </button>
           )}
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

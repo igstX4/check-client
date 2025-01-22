@@ -1,8 +1,11 @@
 .mobileHeader1 {
   display: none;
-  width: 100%;
+  width: 100vw;
+  top: 5px;
+  // padding: 0 10px;
   justify-content: center;
-  position: relative;
+  position: absolute;
+  left: 0;
   align-items: center;
   margin-bottom: 7px;
   height: 44px;
@@ -16,6 +19,7 @@
     right: 0;
     display: flex;
     justify-content: flex-end;
+    padding: 0 10px;
     align-items: center;
     width: 100%;
   }
@@ -25,6 +29,9 @@
     font-size: 17px;
     font-weight: 400;
   }
+}
+.fake {
+  margin-top: 60px;
 }
 @media screen and (max-width: 600px) {
     .mobileHeader1 {

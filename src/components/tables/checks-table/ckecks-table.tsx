@@ -307,7 +307,7 @@ const ChecksTable: React.FC<ChecksTableProps> = ({
         )}
       </div>
 
-      {hasCardsForMobile && !hideChecksInfo && isApplicationMode && (
+
         <div className={styles.checksInfoWrapper}>
           <ChecksInfo
             dates={`${data[0]?.date} → ${data[data.length - 1]?.date}`}
@@ -315,10 +315,10 @@ const ChecksTable: React.FC<ChecksTableProps> = ({
             sumWithVat={formatNumber(totals.total)}
             vat={formatNumber(totals.vat)}
             onAddCheck={onAddCheck}
-            isApplicationMode={isApplicationMode}
+            isApplicationMode={true}
           />
         </div>
-      )}
+      
 
       <div className={styles.container} data-view-mode={viewMode}>
         <table className={styles.table} data-view-mode={viewMode}>
