@@ -4,15 +4,16 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import logout from '../../assets/logout.png'
 import { BuildingsIcon, KeyIcon } from '../../components/svgs/svgs';
 import MobileHeader from '../../components/mobile-header/mobile-header';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { logout as logoutAction } from '../../store/slices/adminSlice';
 
 const Settings = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const admin = useAppSelector(state => state.admin.currentAdmin);
   const activeTab = location.pathname.includes('access') ? 'access' : location.pathname.includes('sellers') ? 'sellers' : '';
-
+  console.log(admin)
   return (
     <div className={s.settings}>
       <div className={s.desktop}>
@@ -39,7 +40,7 @@ const Settings = () => {
             <div className={s.left}>
               <div className={s.account_info}>В</div>
               <div className={s.titles}>
-                <h2>Виктория</h2>
+                <h2>{admin?.name}</h2>
                 <p>Администратор</p>
               </div>
             </div>
