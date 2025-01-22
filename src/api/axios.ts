@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://checkplatform.ru/api';
-export const SERVER_URL = 'http://checkplatform.ru';
+const API_URL = 'https://checkplatform.ru/api';
+export const SERVER_URL = 'https://checkplatform.ru';
 
 // const API_URL = 'http://138.124.78.106/api';
 
