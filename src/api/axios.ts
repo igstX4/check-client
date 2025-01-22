@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api';
-export const SERVER_URL = 'http://localhost:4000';
+const API_URL = 'http://82.97.247.250/api';
+export const SERVER_URL = 'http://82.97.247.250:4000';
 
 // const API_URL = 'http://138.124.78.106/api';
 
