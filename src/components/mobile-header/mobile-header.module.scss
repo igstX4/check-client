@@ -31,10 +31,12 @@
   }
 }
 .fake {
-  margin-top: 60px;
 }
 @media screen and (max-width: 600px) {
     .mobileHeader1 {
         display: flex;
+    }
+    .fake {
+      margin-top: 60px;
     }
 }
