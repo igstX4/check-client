@@ -40,7 +40,7 @@ const ChooseStatus: FC<Props> = ({
   
   return (
     <Modal 
-      title={`Статусы заявки #${currentApplication?.id?.slice(0, 7)}`} 
+      title={`Статусы заявки #${currentApplication?.applicationNumber}`} 
       setOpen={setOpen} 
       isOpened={isOpened}
     >

@@ -92,7 +92,6 @@ const PreviewBottomSheet: React.FC<PreviewBottomSheetProps> = ({
                                 {previewType === 'checks' ? (
                                     <>
                                         <th>№</th>
-                                        <th>ID</th>
                                         <th>Дата</th>
                                         <th>Компания</th>
                                         <th>Продавец</th>
@@ -106,7 +105,6 @@ const PreviewBottomSheet: React.FC<PreviewBottomSheetProps> = ({
                                     <>
                                                                             <th>№</th>
 
-                                        <th>ID</th>
                                         <th>Дата</th>
                                         <th>Клиент</th>
                                         <th>Компания</th>
@@ -122,8 +120,7 @@ const PreviewBottomSheet: React.FC<PreviewBottomSheetProps> = ({
                                 <tr key={row.id}>
                                     {previewType === 'checks' ? (
                                         <>
-                                            <td>{index + 1}</td>
-                                            <td>{row.id}</td>
+                                            <td>{row.checkNumber}</td>
                                             <td>{row.date}</td>
                                             <td>{row.company}</td>
                                             <td>{row.seller}</td>
@@ -135,8 +132,7 @@ const PreviewBottomSheet: React.FC<PreviewBottomSheetProps> = ({
                                         </>
                                     ) : (
                                         <>
-                                            <td>{index + 1}</td>
-                                            <td>{row.id}</td>
+                                            <td>{row.applicationNumber}</td>
                                             <td>{row.date}</td>
                                             <td>{row.client}</td>
                                             <td>{row.company}</td>

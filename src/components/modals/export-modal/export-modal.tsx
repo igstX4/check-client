@@ -75,8 +75,7 @@ const ExportModal: FC<Props> = ({
                 if (exportType === 'table') {
                     // Форматируем данные для Excel с добавлением номера
                     const formattedData = response.data.data.map((item, index) => ({
-                        '№': index + 1,                // Добавляем номер
-                        'ID': item.id,       // Переименовываем ID в "Номер заявки"
+                        '№': item.applicationNumber,                // Добавляем номер
                         'Дата': item.date,
                         'Клиент': item.client,
                         'Компания': item.company,
@@ -92,7 +91,6 @@ const ExportModal: FC<Props> = ({
                     // Обновляем ширину колонок
                     const colWidths = [
                         { wch: 5 },  // №
-                        { wch: 15 }, // Номер заявки
                         { wch: 15 }, // Дата
                         { wch: 20 }, // Клиент
                         { wch: 20 }, // Компания
@@ -108,8 +106,7 @@ const ExportModal: FC<Props> = ({
                 } else {
                     // Обновляем текстовый формат тоже
                     const textContent = response.data.data.map((item, index) => (
-                        `№: ${index + 1}
-ID: ${item.id}
+                        `№: ${item.applicationNumber}
 Дата: ${item.date}
 Клиент: ${item.client}
 Компания: ${item.company}
@@ -307,7 +304,7 @@ ID: ${item.id}
             if (exportType === 'table') {
                 // Форматируем данные для Excel
                 const formattedData = previewData.map(item => ({
-                    'ID': item.id,
+                    '№': item.applicationNumber,
                     'Дата': item.date,
                     'Клиент': item.client,
                     'Компания': item.company,
@@ -337,7 +334,7 @@ ID: ${item.id}
                 saveAs(data, 'applications.xlsx');
             } else {
                 const textContent = previewData.map(item => (
-                    `ID: ${item.id}
+                    `№: ${item.applicationNumber}
 Дата: ${item.date}
 Клиент: ${item.client}
 Компания: ${item.company}

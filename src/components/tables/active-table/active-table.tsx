@@ -221,7 +221,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
       <div className={styles.cardHeader}>
         <div className={styles.topElement}>
           <div className={styles.left}>
-            <span className={styles.cardId}>№{index + 1}</span>
+            <span className={styles.cardId}>№{row.applicationNumber}</span>
             <div className={styles.statuses}>
               {(row.status || []).map((status, i) => (
                 <StatusBadge key={i} status={status} />
@@ -321,7 +321,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
                             onClick={() => row.id && navigate(`/admin/application/${row.id}`)} 
                             key={row.id || index}
                         >
-                            <td>{index + 1}</td>
+                            <td>{row.applicationNumber}</td>
                             <td>
                                 <div className={styles.statusGroup}>
                                     {renderStatusCell(row.status || [])}

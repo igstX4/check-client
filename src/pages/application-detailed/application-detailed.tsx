@@ -270,20 +270,20 @@ const ApplicationDetailed: React.FC = () => {
   if (isLoading || !currentApplication) {
     return <Loader />;
   }
-
+  console.log(currentApplication, 123);
   return (
     <div className={s.applicationDetailed}>
       <IsEditingBar isEditing={editing} desktop={true} />
       <PageTitle
-        id={currentApplication?.id?.slice(0, 7) || ''}
-        title={`Заявка #${currentApplication?.id?.slice(0, 7) || ''}`}
+        id={currentApplication?.applicationNumber || ''}
+        title={`Заявка #${currentApplication?.applicationNumber || ''}`}
         statuses={currentApplication?.status}
         setStatuses={handleStatusChange}
         name={currentApplication?.user?.name || ''}
         editing={editing}
         setEditing={setEditing}
         onSave={handleSaveChanges}
-        responsive_name={`Заявка #${currentApplication?.id?.slice(0, 7) || ''}`}
+        responsive_name={`Заявка #${currentApplication?.applicationNumber || ''}`}
         onCancel={handleCancelEditing}
         clientId={currentApplication?.user?.id}
         date={currentApplication?.createdAt}

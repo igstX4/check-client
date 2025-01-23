@@ -82,7 +82,7 @@ const ExportChecksModal: FC<Props> = ({
             if (response?.data?.data) {
                 if (exportType === 'table') {
                     const formattedData = response.data.data.map(item => ({
-                        'ID': item.id,
+                        '№': item.checkNumber,
                         'Дата': item.date,
                         'Компания': item.company,
                         'Продавец': item.seller,
@@ -115,7 +115,7 @@ const ExportChecksModal: FC<Props> = ({
                     saveAs(data, 'checks.xlsx');
                 } else {
                     const textContent = response.data.data.map(item => (
-                        `ID: ${item.id}
+                        `№: ${item.checkNumber}
 Дата: ${item.date}
 Компания: ${item.company}
 Продавец: ${item.seller}

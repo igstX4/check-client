@@ -90,7 +90,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const { companies, sellers } = useSelector((state: RootState) => state.selectors);
-
+  console.log(data, 'data')
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 600);
@@ -144,7 +144,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
         <div className={styles.cardHeader}>
           <div className={styles.topElement}>
             <div className={styles.leftSide}>
-              <span className={styles.cardId}>№{index + 1}</span>
+              <span className={styles.cardId}>№{item.checkNumber}</span>
               <span className={styles.date}>{formatDate(item.date)}</span>
             </div>
             <RowMenu options={getRowMenuOptions(item)} variant="card" />
