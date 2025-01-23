@@ -156,8 +156,7 @@ const PreviewBottomSheet: React.FC<PreviewBottomSheetProps> = ({
                 {data.map((row, index) => (
                     <div key={row.id} className={styles.textRow}>
                         {previewType === 'checks' ? (
-                            `№: ${index + 1}
-ID: ${row.id}
+                            `№: ${row.checkNumber}
 Дата: ${row.date}
 Компания: ${row.company}
 Продавец: ${row.seller}
@@ -168,8 +167,7 @@ ID: ${row.id}
 НДС: ${row.vat}
 `
                         ) : (
-                            `№: ${index + 1}
-ID: ${row.id}
+                            `№: ${row.applicationNumber}
 Дата: ${row.date}
 Клиент: ${row.client}
 Компания: ${row.company}
