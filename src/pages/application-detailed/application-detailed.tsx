@@ -275,6 +275,7 @@ const ApplicationDetailed: React.FC = () => {
     <div className={s.applicationDetailed}>
       <IsEditingBar isEditing={editing} desktop={true} />
       <PageTitle
+        id={currentApplication?.id?.slice(0, 7) || ''}
         title={`Заявка #${currentApplication?.id?.slice(0, 7) || ''}`}
         statuses={currentApplication?.status}
         setStatuses={handleStatusChange}

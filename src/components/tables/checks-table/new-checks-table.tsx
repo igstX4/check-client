@@ -63,6 +63,8 @@ interface NewChecksTableProps {
   filters?: FilterState;
   onMobileFiltersChange?: (filters: FilterState) => void;
   initialData: CheckData[];
+  showSearch?: boolean;
+  setShowSearch?: (value: boolean) => void;
 }
 
 const NewChecksTable: React.FC<NewChecksTableProps> = ({ 
@@ -81,10 +83,11 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
   onPageChange,
   filters,
   onMobileFiltersChange,
-  initialData
+  initialData,
+  showSearch,
+  setShowSearch
 }) => {
   const [isMobile, setIsMobile] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
   const { companies, sellers } = useSelector((state: RootState) => state.selectors);
 
@@ -96,7 +99,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  console.log(data, 'data')
+  // console.log(data, 'data')
   const getRowMenuOptions = (item: CheckData) => [
     {
       id: '1',
@@ -340,6 +343,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
             return dateStr === '–' ? undefined : dateStr;
           })()}
           clientFilters={[]}
+          
           companyFilters={(() => {
             if (!filters.companies?.length) return [];
             return filters.companies
@@ -380,6 +384,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
             }
             onMobileFiltersChange?.(newFilters);
           }}
+          
           onRemoveDateFilter={() => {
             const newFilters = {
               ...filters,

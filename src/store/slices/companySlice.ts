@@ -118,6 +118,7 @@ export const fetchCompanyApplications = createAsyncThunk(
         if (filters.clients?.length) queryParams.append('clients', filters.clients.join(','));
         if (filters.sumFrom) queryParams.append('sumFrom', filters.sumFrom.toString());
         if (filters.sumTo) queryParams.append('sumTo', filters.sumTo.toString());
+        if (filters.search) queryParams.append('search', filters.search);
       }
 
       queryParams.append('page', pagination.page.toString());

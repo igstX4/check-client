@@ -235,12 +235,25 @@ export const fetchUserApplications = createAsyncThunk(
         filters: any, 
         pagination: { page: number, limit: number } 
     }) => {
-        const response = await adminApi.get(`/users/${userId}/applications`, {
-            params: {
-                ...filters,
-                ...pagination
-            }
-        });
+        const queryParams = new URLSearchParams();
+        
+        // Добавляем все фильтры в параметры запроса
+        if (filters) {
+            if (filters.dateStart) queryParams.append('dateStart', filters.dateStart);
+            if (filters.dateEnd) queryParams.append('dateEnd', filters.dateEnd);
+            if (filters.statuses?.length) queryParams.append('statuses', filters.statuses.join(','));
+            if (filters.sellers?.length) queryParams.append('sellers', filters.sellers.join(','));
+            if (filters.companies?.length) queryParams.append('companies', filters.companies.join(','));
+            if (filters.sumFrom) queryParams.append('sumFrom', filters.sumFrom.toString());
+            if (filters.sumTo) queryParams.append('sumTo', filters.sumTo.toString());
+            if (filters.search) queryParams.append('search', filters.search); // Добавляем параметр поиска
+        }
+
+        // Добавляем пагинацию
+        queryParams.append('page', pagination.page.toString());
+        queryParams.append('limit', pagination.limit.toString());
+
+        const response = await adminApi.get(`/users/${userId}/applications?${queryParams}`);
         return response.data;
     }
 );

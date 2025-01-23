@@ -37,6 +37,7 @@ interface PageTitleProps {
   responsive_name?: string;
   marginTopZero?: boolean;
   clientId?: string;
+  id?: string;
 }
 
 const PageTitle: React.FC<PageTitleProps> = ({
@@ -56,6 +57,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
   userDeskr,
   setEditing,
   responsive_name,
+  id,
   responsive_btns = false,
   setOpen,
   onSave,
@@ -139,6 +141,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
                 {statuses && setStatuses && (
                   <ChangingStatus
                     statuses={statuses}
+                    id={id}
                     setStatuses={setStatuses}
                     isOpened={statusesOpened}
                     setOpened={handleStatusChange}

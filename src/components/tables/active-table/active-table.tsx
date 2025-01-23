@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import styles from "./active-table.module.scss";
 import { ClientAvatar, SearchIcon, TableIcon, CardIcon, FilterButton, ExportButton, ClientIcon, ExportIcon } from "../../svgs/svgs";
 import { TableData } from "../../active-applications/active-applications";
@@ -33,6 +33,7 @@ interface ActiveTableProps {
   hideClientColumn?: boolean;
   onRemoveDateFilter: () => void;
   onRemoveSellerFilter: () => void;
+  onSearchChange?: (value: string) => void;
 }
 
 interface TableData {
@@ -95,7 +96,8 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
   hideCompanyColumn = false,
   hideClientColumn = false,
   onRemoveDateFilter,
-  onRemoveSellerFilter
+  onRemoveSellerFilter,
+  onSearchChange
 }) => {
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [isMobile, setIsMobile] = useState(false);
@@ -110,6 +112,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   // console.log(data, 22)
   const { companies, sellers } = useSelector((state: RootState) => state.selectors);
+  const searchTimeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     const handleResize = () => {
@@ -130,22 +133,8 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
 
   const safeData = Array.isArray(data) ? data : [];
   
-  const filteredData = useMemo(() => {
-    return safeData.filter(item => {
-      if (!item) return false;
-      
-      const searchLower = searchQuery.toLowerCase();
-      return (
-        (item.id?.toString() || '').toLowerCase().includes(searchLower) ||
-        (item.company?.name?.toLowerCase() || '').includes(searchLower) ||
-        (item.user?.name?.toLowerCase() || '').includes(searchLower)
-      );
-    }).map(item => ({
-      ...item,
-      status: item.status || []
-    }));
-  }, [safeData, searchQuery]);
-  // console.log(filteredData, 222)
+  const filteredData = data;
+
   const getRowMenuOptions = (row: TableData) => [
     {
       id: '1',
@@ -391,6 +380,31 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
     // Здесь будет логика экспорта
   };
 
+  const handleBottomSheetSearchChange = (value: string) => {
+    setSearchQuery(value);
+    
+    if (onSearchChange) {
+      // Очищаем предыдущий таймер
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+
+      // Устанавливаем новый таймер
+      searchTimeoutRef.current = setTimeout(() => {
+        onSearchChange(value);
+      }, 300);
+    }
+  };
+
+  // Очищаем таймер при размонтировании компонента
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <>
         {renderMobileHeader()}
@@ -509,7 +523,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
                         type="text"
                         placeholder="Поиск по заявкам"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => handleBottomSheetSearchChange(e.target.value)}
                     />
                 </div>
             )}
@@ -534,7 +548,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
             isOpen={showSearch}
             onClose={() => setShowSearch(false)}
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            onSearchChange={handleBottomSheetSearchChange}
             applications={data || []}
         />
 

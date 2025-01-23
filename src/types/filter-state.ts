@@ -5,14 +5,10 @@ export interface FilterState {
     start: string;
     end: string;
   };
-  clients: Array<{
-    id: string;
-    name: string;
-  }>;
+  users: any[];
   companies: string[];
   sellers: string[];
-  status: string;
-  statuses: ApplicationStatus[];
+  statuses: string[];
   sum: {
     from: string;
     to: string;

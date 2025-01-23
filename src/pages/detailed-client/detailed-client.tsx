@@ -236,6 +236,32 @@ const DetailedClient = () => {
     console.log('DetailedClient filters changed:', filters);
   }, [filters]);
 
+  const handleSearchChange = useCallback((value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      search: value
+    }));
+
+    dispatch(fetchUserApplications({
+      userId: id as string,
+      filters: {
+        ...filters,
+        search: value,
+        dateStart: filters.date.start,
+        dateEnd: filters.date.end,
+        companies: filters.companies,
+        sellers: filters.sellers,
+        statuses: filters.statuses,
+        sumFrom: filters.sum?.from,
+        sumTo: filters.sum?.to
+      },
+      pagination: {
+        page: 1,
+        limit: 10
+      }
+    }));
+  }, [dispatch, id, filters]);
+
   if (userInfoLoading) {
     return (
       <div className={s.loadingContainer}>
@@ -296,6 +322,8 @@ const DetailedClient = () => {
           onFilterChange={handleFilterChange}
           hideClientFilter={true}
           filters={filters}
+          onRemoveDateFilter={() => {handleMobileFiltersChange((prev) => ({...prev, date: {start: '', end: ''}}))}}
+          onRemoveSellerFilter={() => {handleMobileFiltersChange((prev) => ({...prev, sellers: []}))}}
           onFiltersChange={handleFilterChange}
         />
         <ActiveTable 
@@ -311,6 +339,7 @@ const DetailedClient = () => {
           onMobileFiltersChange={handleMobileFiltersChange}
           filters={filters}
           hideClientColumn={true}
+          onSearchChange={handleSearchChange}
         />
         
         {pagination && pagination.total > 0 && (

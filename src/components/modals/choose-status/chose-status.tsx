@@ -5,12 +5,14 @@ import { ApplicationStatus } from '../../../constants/statuses';
 import StatusBadge from '../../ui/status-badge/status-badge';
 import CheckBox from '../../ui/check-box/check-box';
 import Button from '../../ui/button/button';
+import { useAppSelector } from '../../../hooks/redux';
 
 interface Props {
   isOpened: boolean;
   setOpen: (isOpen: boolean) => void;
   setStatuses?: (statuses: ApplicationStatus[]) => void;
   statuses?: ApplicationStatus[];
+  id?: string;
 }
 
 const ChooseStatus: FC<Props> = ({ 
@@ -21,6 +23,7 @@ const ChooseStatus: FC<Props> = ({
 }) => {
   const allStatuses: ApplicationStatus[] = ['created', 'issued', 'client_paid', 'us_paid'];
   const [statuses, setStatuses] = React.useState<ApplicationStatus[]>(initialStatuses || []);
+  const { currentApplication, isLoading, history, historyLoading } = useAppSelector(state => state.application);
 
   const handleClick = (status: ApplicationStatus) => {
     if (statuses.includes(status)) {
@@ -37,7 +40,7 @@ const ChooseStatus: FC<Props> = ({
   
   return (
     <Modal 
-      title='Статусы заявки #01' 
+      title={`Статусы заявки #${currentApplication?.id?.slice(0, 7)}`} 
       setOpen={setOpen} 
       isOpened={isOpened}
     >

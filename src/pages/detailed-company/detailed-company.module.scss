@@ -44,6 +44,20 @@
   color: #14151A;
 }
 
+.header1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #14151A;
+    margin: 0;
+  }
+}
+
 .applicationsBlock, .checksBlock {
   margin-top: 20px;
   

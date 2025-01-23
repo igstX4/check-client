@@ -140,7 +140,6 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
       statusFilters.length === 0 && 
       !sumFilter?.from && 
       !sumFilter?.to) {
-    console.log('No filters to display');
     return null;
   }
 

@@ -11,6 +11,7 @@ interface ChangingStatusProps {
   setStatuses: (statuses: ApplicationStatus[]) => void;
   isOpened: boolean;
   setOpened: () => void;
+  id?: string;
 }
 
 const ChangingStatus: FC<ChangingStatusProps> = ({
@@ -18,6 +19,7 @@ const ChangingStatus: FC<ChangingStatusProps> = ({
   setStatuses,
   isOpened,
   setOpened,
+  id
 }) => {
   const allStatuses = [
     'created',
@@ -58,10 +60,13 @@ const ChangingStatus: FC<ChangingStatusProps> = ({
     }
   };
 
+  console.log(id, 'id11')
+
   return (
     <>
       <ChooseStatus 
         isOpened={opened} 
+        id={id}
         setOpen={setOpen} 
         setStatuses={setStatuses}
         statuses={statuses}

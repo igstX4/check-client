@@ -32,11 +32,10 @@ const DetailedCompany = () => {
   
   const [filters, setFilters] = useState<FilterState>({
     date: { start: '', end: '' },
-    clients: [],
+    users: [],
     companies: [],
     sellers: [],
-    status: '',
-    statuses: [] as ApplicationStatus[],
+    statuses: [],
     sum: { from: '', to: '' },
     search: ''
   });
@@ -75,6 +74,13 @@ const DetailedCompany = () => {
   });
 
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  // Добавляем состояния
+  const [showChecksSearch, setShowChecksSearch] = useState(false);
+
+  // Добавляем новые состояния
+  const [isChecksSearchOpen, setIsChecksSearchOpen] = useState(false);
+  const [checksViewMode, setChecksViewMode] = useState<'table' | 'cards'>('table');
 
   // Первая загрузка
   useEffect(() => {
@@ -298,37 +304,10 @@ const DetailedCompany = () => {
   }, [dispatch, id]);
   // console.log(checksFilters, 'checksFilters')
   // Обработчик изменения фильтров для чеков
-  const handleChecksFilterChange = useCallback((updatedFilters: FilterState) => {
-    if (id) {
-      setChecksFilters(prev => {
-        const newFilters = {
-          ...prev,
-          ...updatedFilters,
-          companies: [id],
-          date: updatedFilters.date || prev.date,
-          sum: updatedFilters.sum || { from: '', to: '' },
-          sellers: updatedFilters.sellers || prev.sellers
-        };
-
-        dispatch(fetchChecks({
-          filters: {
-            companies: [id],
-            sellers: newFilters.sellers,
-            dateStart: newFilters.date?.start || '',
-            dateEnd: newFilters.date?.end || '',
-            sumFrom: newFilters.sum?.from || '',
-            sumTo: newFilters.sum?.to || ''
-          },
-          pagination: {
-            page: 1,
-            limit: 10
-          }
-        }));
-
-        return newFilters;
-      });
-    }
-  }, [dispatch, id]);
+  const handleChecksFilterChange = useCallback((newFilters: any) => {
+    setChecksFilters(newFilters);
+    // Здесь добавить логику применения фильтров к чекам
+  }, []);
 
   // Обработчик изменения суммы для чеков
   const handleChecksSumChange = useCallback((from: number | null, to: number | null) => {
@@ -490,6 +469,97 @@ const DetailedCompany = () => {
     }
   };
 
+  // Добавляем функцию обработки поиска
+  const handleSearch = useCallback((value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      search: value
+    }));
+  }, []);
+
+  // Обновляем функцию загрузки данных
+  const loadCompanyApplications = useCallback(() => {
+    if (id) {
+      const apiFilters = {
+        clients: filters.users.map(user => user.id),
+        companies: filters.companies,
+        sellers: filters.sellers,
+        statuses: filters.statuses,
+        dateStart: filters.date.start,
+        dateEnd: filters.date.end,
+        sumFrom: filters.sum?.from,
+        sumTo: filters.sum?.to,
+        search: filters.search
+      };
+
+      dispatch(fetchCompanyApplications({
+        companyId: id,
+        filters: apiFilters,
+        pagination: {
+          page: pagination.page,
+          limit: pagination.limit
+        }
+      }));
+    }
+  }, [dispatch, id, filters, pagination]);
+
+  useEffect(() => {
+    loadCompanyApplications();
+  }, [loadCompanyApplications]);
+
+  const handleSearchChange = useCallback((value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      search: value
+    }));
+
+    if (id) {
+      dispatch(fetchCompanyApplications({
+        companyId: id,
+        filters: {
+          ...filters,
+          search: value,
+          dateStart: filters.date.start,
+          dateEnd: filters.date.end,
+          clients: filters.users.map(user => user.id),
+          sellers: filters.sellers,
+          statuses: filters.statuses,
+          sumFrom: filters.sum?.from,
+          sumTo: filters.sum?.to
+        },
+        pagination: {
+          page: 1,
+          limit: 10
+        }
+      }));
+    }
+  }, [dispatch, id, filters]);
+
+  // Обновляем обработчик смены страницы для чеков
+  const handleChecksPageChange = (page: number) => {
+    if (id) {
+        dispatch(fetchChecks({
+            filters: {
+                companies: [id],
+                sellers: checksFilters.sellers,
+                dateStart: checksFilters.date?.start || '',
+                dateEnd: checksFilters.date?.end || '',
+                sumFrom: checksFilters.sum?.from || '',
+                sumTo: checksFilters.sum?.to || ''
+            },
+            pagination: {
+                page,
+                limit: 10
+            }
+        }));
+    }
+  };
+
+  // Добавляем обработчик поиска для чеков
+  const handleChecksSearch = useCallback((value: string) => {
+    // Здесь добавить логику поиска по чекам
+  }, []);
+
   if (isLoading) {
     return <LoadingSlider />;
   }
@@ -533,7 +603,7 @@ const DetailedCompany = () => {
 
       {/* Блок заявок */}
       <div className={s.applicationsBlock}>
-        <div className={s.header}>
+        <div className={s.header1}>
           <h2>Заявки компании</h2>
           {/* <Button
             icon={<DownloadSvg />}
@@ -551,6 +621,12 @@ const DetailedCompany = () => {
           hideClientFilter={false}
           hideCompanyFilter={true}
           filters={filters}
+          onRemoveSellerFilter={() => {
+            handleMobileFiltersChange({ ...filters, sellers: [] });
+          }}
+          onRemoveDateFilter={() => {
+            handleMobileFiltersChange({ ...filters, date: { start: '', end: '' } });
+          }}
           onFiltersChange={handleMobileFiltersChange}
         />
         <ActiveTable 
@@ -564,17 +640,24 @@ const DetailedCompany = () => {
           isLoading={isLoadingApplications}
           hideClientFilter={false}
           hideCompanyFilter={true}
+          onRemoveDateFilter={() => {
+            handleMobileFiltersChange({ ...filters, date: { start: '', end: '' } });
+          }}
+          onRemoveSellerFilter={() => {
+            handleMobileFiltersChange({ ...filters, sellers: [] });
+          }}
           onMobileFiltersChange={handleMobileFiltersChange}
           filters={filters}
           hideCompanyColumn={true}
           currentPage={currentPage}
           onPageChange={handlePageChange}
+          onSearchChange={handleSearchChange}
         />
       </div>
 
       {/* Блок чеков */}
       <div className={s.checksBlock}>
-        <div className={s.header}>
+        <div className={s.header1}>
           <h2>Чеки компании</h2>
           {/* <Button
             icon={<DownloadSvg />}
@@ -588,19 +671,37 @@ const DetailedCompany = () => {
           data={checks}
           initialData={checks}
           onDateChange={handleChecksDateChange}
+          
           onFilterChange={handleChecksFilterChange}
+          onRemoveSellerFilter={() => {
+            handleChecksFilterChange({ ...checksFilters, sellers: [] });
+          }}
           hideClientFilter={true}
           hideStatusFilter={true}
+          onRemoveDateFilter={() => {
+            handleChecksFilterChange({ ...checksFilters, date: { start: '', end: '' } });
+          }}
           hideCompanyFilterDisplay={true}
           filters={checksFilters}
           onFiltersChange={handleChecksFilterChange}
         />
         <NewChecksTable 
           data={checks}
-          isLoading={isLoading}
-          pagination={pagination}
-          onPageChange={handlePageChange}
+          isLoading={isLoadingChecks}
+          pagination={checksPagination}
+          onPageChange={handleChecksPageChange}
           hideCompanyColumn={true}
+          onSearchChange={handleChecksSearch}
+          onFilterOpen={() => setIsFilterOpen(true)}
+          onFilterChange={handleChecksFilterChange}
+          filters={checksFilters}
+          onMobileFiltersChange={handleChecksFilterChange}
+          showSearch={showChecksSearch}
+          setShowSearch={setShowChecksSearch}
+          isSearchOpen={isChecksSearchOpen}
+          setIsSearchOpen={() => setIsSearchOpen(true)}
+          viewMode={checksViewMode}
+          setViewMode={setChecksViewMode}
         />
 
         {/* Добавляем мобильные компоненты */}

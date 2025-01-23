@@ -48,9 +48,14 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
 
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
-  const loadApplications = useCallback(() => {
-    // console.log('Loading with filters:', filters);
+  const handleSearchChange = useCallback((value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      search: value
+    }));
+  }, []);
 
+  const loadApplications = useCallback(() => {
     const apiFilters = {
       clients: filters.users.map(user => user.id),
       companies: filters.companies,
@@ -59,10 +64,9 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
       dateStart: dateParam || filters.date.start,
       dateEnd: dateParam || filters.date.end,
       sumFrom: filters.sum?.from || '',
-      sumTo: filters.sum?.to || ''
+      sumTo: filters.sum?.to || '',
+      search: filters.search
     };
-
-    // console.log('API filters:', apiFilters);
 
     dispatch(fetchApplications({
       filters: apiFilters,
@@ -194,13 +198,6 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
     }
   };
 
-  const handleSearchChange = (query: string) => {
-    setFilters(prev => ({
-      ...prev,
-      search: query
-    }));
-  };
-
   const handleExport = (type: 'table' | 'text', exportFilters: FilterState) => {
     // Здесь логика экспорта с использованием переданных фильтров
     console.log('Exporting as:', type, 'with filters:', exportFilters);
@@ -286,6 +283,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
         hideCompanyColumn={false}
         onRemoveDateFilter={handleRemoveDateFilter}
         onRemoveSellerFilter={handleRemoveSellerFilter}
+        onSearchChange={handleSearchChange}
       />
       
       {!isLoading && pagination && (
