@@ -73,9 +73,10 @@ const ExportModal: FC<Props> = ({
 
             if (response?.data?.data) {
                 if (exportType === 'table') {
-                    // Форматируем данные для Excel
-                    const formattedData = response.data.data.map(item => ({
-                        'ID': item.id,
+                    // Форматируем данные для Excel с добавлением номера
+                    const formattedData = response.data.data.map((item, index) => ({
+                        '№': index + 1,                // Добавляем номер
+                        'ID': item.id,       // Переименовываем ID в "Номер заявки"
                         'Дата': item.date,
                         'Клиент': item.client,
                         'Компания': item.company,
@@ -88,9 +89,10 @@ const ExportModal: FC<Props> = ({
                     const wb = XLSX.utils.book_new();
                     XLSX.utils.book_append_sheet(wb, ws, "Заявки");
                     
-                    // Устанавливаем ширину колонок
+                    // Обновляем ширину колонок
                     const colWidths = [
-                        { wch: 10 }, // ID
+                        { wch: 5 },  // №
+                        { wch: 15 }, // Номер заявки
                         { wch: 15 }, // Дата
                         { wch: 20 }, // Клиент
                         { wch: 20 }, // Компания
@@ -104,8 +106,10 @@ const ExportModal: FC<Props> = ({
                     const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     saveAs(data, 'applications.xlsx');
                 } else {
-                    const textContent = response.data.data.map(item => (
-                        `ID: ${item.id}
+                    // Обновляем текстовый формат тоже
+                    const textContent = response.data.data.map((item, index) => (
+                        `№: ${index + 1}
+ID: ${item.id}
 Дата: ${item.date}
 Клиент: ${item.client}
 Компания: ${item.company}
