@@ -242,7 +242,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
           </div>
           <div className={styles.sellerBlock}>
             <span className={styles.cardLabel}>Продавец</span>
-            <span className={styles.sellerName}>{row.seller?.name || ''}</span>
+            <span style={row.seller.type === "white" ? {color: '#4778F5'} : {}} className={styles.sellerName}>{row.seller?.name || ''}</span>
             <span className={styles.inn}>ИНН {row.seller?.inn || ''}</span>
           </div>
         </div>
@@ -337,7 +337,7 @@ const ActiveTable: React.FC<ActiveTableProps> = ({
                             )}
                             <td>
                                 <div className={styles.companyDiv}>
-                                    <span className={styles.sellerName}>{row.seller?.name || ''}</span>
+                                    <span style={row.seller.type === "white" ? {color: '#4778F5'} : {}} className={styles.sellerName}>{row.seller?.name || ''}</span>
                                     <span className={styles.inn}>ИНН {row.seller?.inn || ''}</span>
                                 </div>
                             </td>

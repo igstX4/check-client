@@ -144,7 +144,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
         <div className={styles.cardHeader}>
           <div className={styles.topElement}>
             <div className={styles.leftSide}>
-              <span className={styles.cardId}>№{item.checkNumber}</span>
+              <span className={styles.cardId}>№{item.application?.applicationNumber}</span>
               <span className={styles.date}>{formatDate(item.date)}</span>
             </div>
             <RowMenu options={getRowMenuOptions(item)} variant="card" />
@@ -252,7 +252,7 @@ const NewChecksTable: React.FC<NewChecksTableProps> = ({
               const vat = calculateVAT(totalPrice);
               return (
                 <tr onClick={() => navigate(`/admin/application/${item.application?._id}`)} key={item.id}>
-                  <td>{index + 1}</td>
+                  <td>{item.application?.applicationNumber}</td>
                   <td>
                     <div className={styles.dateContainer}>
                       <Calendar />

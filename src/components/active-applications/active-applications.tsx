@@ -28,7 +28,7 @@ const ActiveApplications: React.FC<ActiveApplicationsProps> = ({ isActiveOnly = 
   const sellersParam = searchParams.get('sellers');
   // console.log(applications);
   const activeApplicationsCount = useSelector(selectActiveApplicationsCount);
-
+  console.log(applications, 'applications')
   const [showSearch, setShowSearch] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     date: { start: '', end: '' },
