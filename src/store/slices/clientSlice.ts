@@ -166,7 +166,7 @@ export const deleteClient = createAsyncThunk(
     'client/delete',
     async (clientId: string, { rejectWithValue }) => {
         try {
-            await clientApi.delete(`/users/${clientId}`);
+            await adminApi.delete(`/users/${clientId}`);
             return clientId;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'Ошибка при удалении клиента');

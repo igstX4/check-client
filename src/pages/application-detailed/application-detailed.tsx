@@ -82,7 +82,6 @@ const ApplicationDetailed: React.FC = () => {
   const { currentApplication, isLoading, history, historyLoading } = useAppSelector(state => state.application);
   const { sellers } = useAppSelector(state => state.seller);
   console.log(currentApplication);
-  
   const [editing, setEditing] = useState(false);
   const [tempChanges, setTempChanges] = useState<TempChanges>({});
   const [isAddCheckModalOpen, setIsAddCheckModalOpen] = useState(false);
@@ -173,7 +172,18 @@ const ApplicationDetailed: React.FC = () => {
       }));
     }
   };
-
+  const getChecksData = () => {
+    const totalSum = currentApplication?.checks?.reduce((accumulator, currentValue) => accumulator + currentValue.totalPrice,
+          0) || '0'
+    let vat = 0
+    if (typeof totalSum === 'number') {
+      vat = totalSum * 0.2
+    }
+    return {
+      totalSum,
+      vat
+    }
+  }
   // Сохранение всех изменений
   const handleSaveChanges = async () => {
     if (!id) return;
@@ -233,11 +243,13 @@ const ApplicationDetailed: React.FC = () => {
   const formattedCommission = useMemo(() => {
     if (!currentApplication) return { percentage: '0', amount: '0' };
     
+    console.log(currentApplication.commission, 'commission');
     return {
-        percentage: currentApplication.commission.toString(),
-        amount: ((Number(currentApplication.totalAmount) * currentApplication.commission) / 100).toFixed(2)
+        percentage: currentApplication.commission.percentage?.toString(),
+        // amount: ((Number(currentApplication.totalAmount) * currentApplication.commission.percentage) / 100).toFixed(2)
     };
   }, [currentApplication]);
+  // console.log(formattedCommission, 1);
 
   const handleAddCheck = (checkData: NewCheck) => {
     // Функция для правильного парсинга числа в русском формате
@@ -259,7 +271,6 @@ const ApplicationDetailed: React.FC = () => {
       totalPrice: parseRussianNumber(checkData.totalWithVAT)
     };
 
-    console.log(newCheck, 12);
     setTempChanges(prev => ({
       ...prev,
       checksToAdd: [...(prev.checksToAdd || []), newCheck]
@@ -337,7 +348,7 @@ const ApplicationDetailed: React.FC = () => {
               },
               {
                 label: "Сумма комиссии",
-                value: tempChanges.commission?.amount ?? formattedCommission.amount,
+                value: tempChanges.commission?.amount ?? Number(getChecksData().totalSum) * Number(formattedCommission.percentage) / 100,
                 disabled: true,
                 onChange: () => {},
                 hideArrow: true
@@ -351,10 +362,10 @@ const ApplicationDetailed: React.FC = () => {
         dates={currentApplication?.dates ? 
             `${currentApplication.dates.start || ''} → ${currentApplication.dates.end || ''}` : 
             ''}
-        checksCount={currentApplication?.checksCount || 0}
-        sumWithVat={currentApplication?.totalAmount || '0'}
+        checksCount={currentApplication?.checks?.length || 0}
+        sumWithVat={getChecksData().totalSum || 0}
         onAddCheck={editing ? () => setIsAddCheckModalOpen(true) : undefined}
-        vat={currentApplication?.vat || '0'}
+        vat={getChecksData().vat}
       />
 
       <div className={s.checksTable}>

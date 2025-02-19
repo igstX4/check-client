@@ -46,7 +46,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
   companyId
 }) => {
   const navigate = useNavigate();
-
+  // console.log(fields, 1)
   const formatSellersForSelect = () => {
     return sellers?.map(s => ({
       name: s.name,
