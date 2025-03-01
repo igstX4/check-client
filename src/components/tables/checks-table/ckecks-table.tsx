@@ -76,7 +76,7 @@ const ChecksTable: React.FC<ChecksTableProps> = ({
 }) => {
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [isMobile, setIsMobile] = useState(false);
-  console.log(data, 'data')
+  // console.log(data, 'data')
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 600);
@@ -255,11 +255,11 @@ const ChecksTable: React.FC<ChecksTableProps> = ({
   };
 
   const formatNumber = (num: number): string => {
-    console.log(num, 'start')
-    console.log(new Intl.NumberFormat('ru-RU', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(num), 'end')
+    // console.log(num, 'start')
+    // console.log(new Intl.NumberFormat('ru-RU', {
+    //   minimumFractionDigits: 2,
+    //   maximumFractionDigits: 2
+    // }).format(num), 'end')
 
     return new Intl.NumberFormat('ru-RU', {
       minimumFractionDigits: 2,

@@ -81,7 +81,6 @@ const ApplicationDetailed: React.FC = () => {
   const { addNotification } = useNotification();
   const { currentApplication, isLoading, history, historyLoading } = useAppSelector(state => state.application);
   const { sellers } = useAppSelector(state => state.seller);
-  console.log(currentApplication);
   const [editing, setEditing] = useState(false);
   const [tempChanges, setTempChanges] = useState<TempChanges>({});
   const [isAddCheckModalOpen, setIsAddCheckModalOpen] = useState(false);
@@ -154,7 +153,7 @@ const ApplicationDetailed: React.FC = () => {
       }
     }));
   };
-
+  // console.log(tempChanges)
   // Добавляем обработчик удаления чека
   const handleCheckDelete = (checkId: string) => {
     // Проверяем, является ли чек временным (новым)
@@ -243,7 +242,7 @@ const ApplicationDetailed: React.FC = () => {
   const formattedCommission = useMemo(() => {
     if (!currentApplication) return { percentage: '0', amount: '0' };
     
-    console.log(currentApplication.commission, 'commission');
+    // console.log(currentApplication.commission, 'commission');
     return {
         percentage: currentApplication.commission.percentage?.toString(),
         // amount: ((Number(currentApplication.totalAmount) * currentApplication.commission.percentage) / 100).toFixed(2)
@@ -281,7 +280,8 @@ const ApplicationDetailed: React.FC = () => {
   if (isLoading || !currentApplication) {
     return <Loader />;
   }
-  console.log(currentApplication, 123);
+  // console.log(Number(getChecksData().totalSum) * Number(formattedCommission.percentage) / 100, 'test');
+
   return (
     <div className={s.applicationDetailed}>
       <IsEditingBar isEditing={editing} desktop={true} />
@@ -348,7 +348,9 @@ const ApplicationDetailed: React.FC = () => {
               },
               {
                 label: "Сумма комиссии",
-                value: tempChanges.commission?.amount ?? Number(getChecksData().totalSum) * Number(formattedCommission.percentage) / 100,
+                value: tempChanges.commission?.percentage 
+                ? Number(getChecksData().totalSum) * Number(tempChanges.commission.percentage) / 100
+                : Number(getChecksData().totalSum) * Number(formattedCommission.percentage) / 100,
                 disabled: true,
                 onChange: () => {},
                 hideArrow: true
@@ -358,7 +360,7 @@ const ApplicationDetailed: React.FC = () => {
         </div>
       </div>
 
-      <ChecksInfo
+      {/* <ChecksInfo
         dates={currentApplication?.dates ? 
             `${currentApplication.dates.start || ''} → ${currentApplication.dates.end || ''}` : 
             ''}
@@ -366,7 +368,7 @@ const ApplicationDetailed: React.FC = () => {
         sumWithVat={getChecksData().totalSum || 0}
         onAddCheck={editing ? () => setIsAddCheckModalOpen(true) : undefined}
         vat={getChecksData().vat}
-      />
+      /> */}
 
       <div className={s.checksTable}>
         <ChecksTable 
