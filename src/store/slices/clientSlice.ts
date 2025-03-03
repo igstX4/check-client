@@ -113,7 +113,7 @@ const initialState: ClientState = {
 // Создание клиента (для админа)
 export const createClient = createAsyncThunk(
     'client/create',
-    async (data: { name: string }, { rejectWithValue }) => {
+    async (data: { name: string, canSave: boolean }, { rejectWithValue }) => {
         try {
             const response = await adminApi.post('/users/register', data);
             // Проверяем наличие данных, но не выбрасываем ошибку

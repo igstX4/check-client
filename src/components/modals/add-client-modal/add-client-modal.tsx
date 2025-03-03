@@ -29,7 +29,7 @@ const AddClientModal: FC<Props> = ({ isOpened, setOpen }) => {
         }
 
         try {
-            const result = await dispatch(createClient({ name })).unwrap();
+            const result = await dispatch(createClient({ name, canSave: isChecked })).unwrap();
             setClientKey(result?.key || '');
             setStep(2);
             addNotification('Клиент успешно создан', 'success');
